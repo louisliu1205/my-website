@@ -121,12 +121,13 @@
       text-align:center;background:var(--bg);transition:border-color .15s;}
     .letter-card:hover{border-color:var(--accent);}
     .letter-card .ltr{font-size:26px;font-weight:700;color:var(--fg);line-height:1.2;}
-    .letter-card .lipa{font-size:13px;color:var(--accent);font-family:serif;margin:4px 0 2px;}
-    .letter-card .lex{font-size:12px;color:var(--fg-mute);margin-bottom:8px;}
+    .letter-card .sound-row{display:flex;align-items:center;justify-content:center;gap:6px;margin:5px 0 0;}
+    .letter-card .lipa{font-size:13px;color:var(--accent);font-family:serif;}
+    .letter-card .lex{font-size:12px;color:var(--fg-soft);}
     .play-btn{display:inline-flex;align-items:center;justify-content:center;
-      width:28px;height:28px;border-radius:50%;border:1px solid var(--line);
-      background:var(--bg-alt);cursor:pointer;font-size:13px;color:var(--accent);
-      transition:all .15s;user-select:none;}
+      width:26px;height:26px;border-radius:50%;border:1px solid var(--line);
+      background:var(--bg-alt);cursor:pointer;font-size:12px;color:var(--accent);
+      transition:all .15s;user-select:none;flex-shrink:0;}
     .play-btn:hover{background:var(--accent);color:#fff;border-color:var(--accent);}
 
     /* Video embeds */
@@ -202,35 +203,35 @@
           <p>每个字母在单词里最常发的那个音，叫"本音"。先把 26 个字母的本音记住，就能拼读大部分简单单词。点 🔊 听示例词的发音。</p>
         </div>
 
-        <p style="font-size:13px;color:var(--fg-mute);margin-bottom:12px;">🔊 点击按钮听示例词发音（需浏览器支持语音）</p>
+        <p style="font-size:13px;color:var(--fg-mute);margin-bottom:12px;">🔊 = 本音 &nbsp;▶ = 例词发音（需浏览器支持语音）</p>
 
         <div class="letter-grid">
-          <div class="letter-card"><div class="ltr">Aa</div><div class="lipa">/æ/</div><div class="lex">apple</div><button class="play-btn" onclick="playWord('apple')">🔊</button></div>
-          <div class="letter-card"><div class="ltr">Bb</div><div class="lipa">/b/</div><div class="lex">boy</div><button class="play-btn" onclick="playWord('boy')">🔊</button></div>
-          <div class="letter-card"><div class="ltr">Cc</div><div class="lipa">/k/</div><div class="lex">cat</div><button class="play-btn" onclick="playWord('cat')">🔊</button></div>
-          <div class="letter-card"><div class="ltr">Dd</div><div class="lipa">/d/</div><div class="lex">dog</div><button class="play-btn" onclick="playWord('dog')">🔊</button></div>
-          <div class="letter-card"><div class="ltr">Ee</div><div class="lipa">/e/</div><div class="lex">egg</div><button class="play-btn" onclick="playWord('egg')">🔊</button></div>
-          <div class="letter-card"><div class="ltr">Ff</div><div class="lipa">/f/</div><div class="lex">fish</div><button class="play-btn" onclick="playWord('fish')">🔊</button></div>
-          <div class="letter-card"><div class="ltr">Gg</div><div class="lipa">/ɡ/</div><div class="lex">go</div><button class="play-btn" onclick="playWord('go')">🔊</button></div>
-          <div class="letter-card"><div class="ltr">Hh</div><div class="lipa">/h/</div><div class="lex">hat</div><button class="play-btn" onclick="playWord('hat')">🔊</button></div>
-          <div class="letter-card"><div class="ltr">Ii</div><div class="lipa">/ɪ/</div><div class="lex">it</div><button class="play-btn" onclick="playWord('it')">🔊</button></div>
-          <div class="letter-card"><div class="ltr">Jj</div><div class="lipa">/dʒ/</div><div class="lex">jump</div><button class="play-btn" onclick="playWord('jump')">🔊</button></div>
-          <div class="letter-card"><div class="ltr">Kk</div><div class="lipa">/k/</div><div class="lex">king</div><button class="play-btn" onclick="playWord('king')">🔊</button></div>
-          <div class="letter-card"><div class="ltr">Ll</div><div class="lipa">/l/</div><div class="lex">lion</div><button class="play-btn" onclick="playWord('lion')">🔊</button></div>
-          <div class="letter-card"><div class="ltr">Mm</div><div class="lipa">/m/</div><div class="lex">map</div><button class="play-btn" onclick="playWord('map')">🔊</button></div>
-          <div class="letter-card"><div class="ltr">Nn</div><div class="lipa">/n/</div><div class="lex">no</div><button class="play-btn" onclick="playWord('no')">🔊</button></div>
-          <div class="letter-card"><div class="ltr">Oo</div><div class="lipa">/ɒ/</div><div class="lex">on</div><button class="play-btn" onclick="playWord('on')">🔊</button></div>
-          <div class="letter-card"><div class="ltr">Pp</div><div class="lipa">/p/</div><div class="lex">pig</div><button class="play-btn" onclick="playWord('pig')">🔊</button></div>
-          <div class="letter-card"><div class="ltr">Qq</div><div class="lipa">/kw/</div><div class="lex">queen</div><button class="play-btn" onclick="playWord('queen')">🔊</button></div>
-          <div class="letter-card"><div class="ltr">Rr</div><div class="lipa">/r/</div><div class="lex">red</div><button class="play-btn" onclick="playWord('red')">🔊</button></div>
-          <div class="letter-card"><div class="ltr">Ss</div><div class="lipa">/s/</div><div class="lex">sun</div><button class="play-btn" onclick="playWord('sun')">🔊</button></div>
-          <div class="letter-card"><div class="ltr">Tt</div><div class="lipa">/t/</div><div class="lex">top</div><button class="play-btn" onclick="playWord('top')">🔊</button></div>
-          <div class="letter-card"><div class="ltr">Uu</div><div class="lipa">/ʌ/</div><div class="lex">up</div><button class="play-btn" onclick="playWord('up')">🔊</button></div>
-          <div class="letter-card"><div class="ltr">Vv</div><div class="lipa">/v/</div><div class="lex">van</div><button class="play-btn" onclick="playWord('van')">🔊</button></div>
-          <div class="letter-card"><div class="ltr">Ww</div><div class="lipa">/w/</div><div class="lex">wet</div><button class="play-btn" onclick="playWord('wet')">🔊</button></div>
-          <div class="letter-card"><div class="ltr">Xx</div><div class="lipa">/ks/</div><div class="lex">fox</div><button class="play-btn" onclick="playWord('fox')">🔊</button></div>
-          <div class="letter-card"><div class="ltr">Yy</div><div class="lipa">/j/</div><div class="lex">yes</div><button class="play-btn" onclick="playWord('yes')">🔊</button></div>
-          <div class="letter-card"><div class="ltr">Zz</div><div class="lipa">/z/</div><div class="lex">zip</div><button class="play-btn" onclick="playWord('zip')">🔊</button></div>
+          <div class="letter-card"><div class="ltr">Aa</div><div class="sound-row"><span class="lipa">/æ/</span><button class="play-btn" onclick="playPhoneme('A')" title="本音">🔊</button></div><div class="sound-row"><span class="lex">apple</span><button class="play-btn" onclick="playWord('apple')" title="例词">▶</button></div></div>
+          <div class="letter-card"><div class="ltr">Bb</div><div class="sound-row"><span class="lipa">/b/</span><button class="play-btn" onclick="playPhoneme('B')" title="本音">🔊</button></div><div class="sound-row"><span class="lex">boy</span><button class="play-btn" onclick="playWord('boy')" title="例词">▶</button></div></div>
+          <div class="letter-card"><div class="ltr">Cc</div><div class="sound-row"><span class="lipa">/k/</span><button class="play-btn" onclick="playPhoneme('C')" title="本音">🔊</button></div><div class="sound-row"><span class="lex">cat</span><button class="play-btn" onclick="playWord('cat')" title="例词">▶</button></div></div>
+          <div class="letter-card"><div class="ltr">Dd</div><div class="sound-row"><span class="lipa">/d/</span><button class="play-btn" onclick="playPhoneme('D')" title="本音">🔊</button></div><div class="sound-row"><span class="lex">dog</span><button class="play-btn" onclick="playWord('dog')" title="例词">▶</button></div></div>
+          <div class="letter-card"><div class="ltr">Ee</div><div class="sound-row"><span class="lipa">/e/</span><button class="play-btn" onclick="playPhoneme('E')" title="本音">🔊</button></div><div class="sound-row"><span class="lex">egg</span><button class="play-btn" onclick="playWord('egg')" title="例词">▶</button></div></div>
+          <div class="letter-card"><div class="ltr">Ff</div><div class="sound-row"><span class="lipa">/f/</span><button class="play-btn" onclick="playPhoneme('F')" title="本音">🔊</button></div><div class="sound-row"><span class="lex">fish</span><button class="play-btn" onclick="playWord('fish')" title="例词">▶</button></div></div>
+          <div class="letter-card"><div class="ltr">Gg</div><div class="sound-row"><span class="lipa">/ɡ/</span><button class="play-btn" onclick="playPhoneme('G')" title="本音">🔊</button></div><div class="sound-row"><span class="lex">go</span><button class="play-btn" onclick="playWord('go')" title="例词">▶</button></div></div>
+          <div class="letter-card"><div class="ltr">Hh</div><div class="sound-row"><span class="lipa">/h/</span><button class="play-btn" onclick="playPhoneme('H')" title="本音">🔊</button></div><div class="sound-row"><span class="lex">hat</span><button class="play-btn" onclick="playWord('hat')" title="例词">▶</button></div></div>
+          <div class="letter-card"><div class="ltr">Ii</div><div class="sound-row"><span class="lipa">/ɪ/</span><button class="play-btn" onclick="playPhoneme('I')" title="本音">🔊</button></div><div class="sound-row"><span class="lex">it</span><button class="play-btn" onclick="playWord('it')" title="例词">▶</button></div></div>
+          <div class="letter-card"><div class="ltr">Jj</div><div class="sound-row"><span class="lipa">/dʒ/</span><button class="play-btn" onclick="playPhoneme('J')" title="本音">🔊</button></div><div class="sound-row"><span class="lex">jump</span><button class="play-btn" onclick="playWord('jump')" title="例词">▶</button></div></div>
+          <div class="letter-card"><div class="ltr">Kk</div><div class="sound-row"><span class="lipa">/k/</span><button class="play-btn" onclick="playPhoneme('K')" title="本音">🔊</button></div><div class="sound-row"><span class="lex">king</span><button class="play-btn" onclick="playWord('king')" title="例词">▶</button></div></div>
+          <div class="letter-card"><div class="ltr">Ll</div><div class="sound-row"><span class="lipa">/l/</span><button class="play-btn" onclick="playPhoneme('L')" title="本音">🔊</button></div><div class="sound-row"><span class="lex">lion</span><button class="play-btn" onclick="playWord('lion')" title="例词">▶</button></div></div>
+          <div class="letter-card"><div class="ltr">Mm</div><div class="sound-row"><span class="lipa">/m/</span><button class="play-btn" onclick="playPhoneme('M')" title="本音">🔊</button></div><div class="sound-row"><span class="lex">map</span><button class="play-btn" onclick="playWord('map')" title="例词">▶</button></div></div>
+          <div class="letter-card"><div class="ltr">Nn</div><div class="sound-row"><span class="lipa">/n/</span><button class="play-btn" onclick="playPhoneme('N')" title="本音">🔊</button></div><div class="sound-row"><span class="lex">no</span><button class="play-btn" onclick="playWord('no')" title="例词">▶</button></div></div>
+          <div class="letter-card"><div class="ltr">Oo</div><div class="sound-row"><span class="lipa">/ɒ/</span><button class="play-btn" onclick="playPhoneme('O')" title="本音">🔊</button></div><div class="sound-row"><span class="lex">on</span><button class="play-btn" onclick="playWord('on')" title="例词">▶</button></div></div>
+          <div class="letter-card"><div class="ltr">Pp</div><div class="sound-row"><span class="lipa">/p/</span><button class="play-btn" onclick="playPhoneme('P')" title="本音">🔊</button></div><div class="sound-row"><span class="lex">pig</span><button class="play-btn" onclick="playWord('pig')" title="例词">▶</button></div></div>
+          <div class="letter-card"><div class="ltr">Qq</div><div class="sound-row"><span class="lipa">/kw/</span><button class="play-btn" onclick="playPhoneme('Q')" title="本音">🔊</button></div><div class="sound-row"><span class="lex">queen</span><button class="play-btn" onclick="playWord('queen')" title="例词">▶</button></div></div>
+          <div class="letter-card"><div class="ltr">Rr</div><div class="sound-row"><span class="lipa">/r/</span><button class="play-btn" onclick="playPhoneme('R')" title="本音">🔊</button></div><div class="sound-row"><span class="lex">red</span><button class="play-btn" onclick="playWord('red')" title="例词">▶</button></div></div>
+          <div class="letter-card"><div class="ltr">Ss</div><div class="sound-row"><span class="lipa">/s/</span><button class="play-btn" onclick="playPhoneme('S')" title="本音">🔊</button></div><div class="sound-row"><span class="lex">sun</span><button class="play-btn" onclick="playWord('sun')" title="例词">▶</button></div></div>
+          <div class="letter-card"><div class="ltr">Tt</div><div class="sound-row"><span class="lipa">/t/</span><button class="play-btn" onclick="playPhoneme('T')" title="本音">🔊</button></div><div class="sound-row"><span class="lex">top</span><button class="play-btn" onclick="playWord('top')" title="例词">▶</button></div></div>
+          <div class="letter-card"><div class="ltr">Uu</div><div class="sound-row"><span class="lipa">/ʌ/</span><button class="play-btn" onclick="playPhoneme('U')" title="本音">🔊</button></div><div class="sound-row"><span class="lex">up</span><button class="play-btn" onclick="playWord('up')" title="例词">▶</button></div></div>
+          <div class="letter-card"><div class="ltr">Vv</div><div class="sound-row"><span class="lipa">/v/</span><button class="play-btn" onclick="playPhoneme('V')" title="本音">🔊</button></div><div class="sound-row"><span class="lex">van</span><button class="play-btn" onclick="playWord('van')" title="例词">▶</button></div></div>
+          <div class="letter-card"><div class="ltr">Ww</div><div class="sound-row"><span class="lipa">/w/</span><button class="play-btn" onclick="playPhoneme('W')" title="本音">🔊</button></div><div class="sound-row"><span class="lex">wet</span><button class="play-btn" onclick="playWord('wet')" title="例词">▶</button></div></div>
+          <div class="letter-card"><div class="ltr">Xx</div><div class="sound-row"><span class="lipa">/ks/</span><button class="play-btn" onclick="playPhoneme('X')" title="本音">🔊</button></div><div class="sound-row"><span class="lex">fox</span><button class="play-btn" onclick="playWord('fox')" title="例词">▶</button></div></div>
+          <div class="letter-card"><div class="ltr">Yy</div><div class="sound-row"><span class="lipa">/j/</span><button class="play-btn" onclick="playPhoneme('Y')" title="本音">🔊</button></div><div class="sound-row"><span class="lex">yes</span><button class="play-btn" onclick="playWord('yes')" title="例词">▶</button></div></div>
+          <div class="letter-card"><div class="ltr">Zz</div><div class="sound-row"><span class="lipa">/z/</span><button class="play-btn" onclick="playPhoneme('Z')" title="本音">🔊</button></div><div class="sound-row"><span class="lex">zip</span><button class="play-btn" onclick="playWord('zip')" title="例词">▶</button></div></div>
         </div>
 
         <div class="tip-box" style="margin-top:20px;">
@@ -943,41 +944,41 @@ if (window.speechSynthesis) {
   _cachedVoices = window.speechSynthesis.getVoices();
 }
 
-function playWord(word) {
+// Phoneme approximations for Web Speech TTS
+const _phonemeMap = {
+  A:'aah', B:'buh', C:'kuh', D:'duh', E:'eh', F:'fffff', G:'guh', H:'huh',
+  I:'ih',  J:'juh', K:'kuh', L:'llll', M:'mmmm', N:'nnnn', O:'awh', P:'puh',
+  Q:'kwuh', R:'ruh', S:'ssss', T:'tuh', U:'uh', V:'vvvv', W:'wuh',
+  X:'ks', Y:'yuh', Z:'zzzz'
+};
+
+function _speak(text, rate, pitch) {
   if (!window.speechSynthesis) return;
   window.speechSynthesis.cancel();
-  const u = new SpeechSynthesisUtterance(word);
+  const u = new SpeechSynthesisUtterance(text);
   u.lang = 'en-US';
-  u.rate = 0.78;
-  u.pitch = 0.5; // deeper voice
-
+  u.rate = rate || 0.78;
+  u.pitch = 0.85;
   const voices = _cachedVoices.length ? _cachedVoices : window.speechSynthesis.getVoices();
-  // Prefer good male American voices by name
-  // Prefer deep male US voices available on macOS/Chrome
-  const preferred = [
-    'Reed (英语（美国）)',
-    'Grandpa (英语（美国）)',
-    'Rocko (英语（美国）)',
-    'Reed',
-    'Grandpa',
-    'Rocko',
-    'Fred',
-    'Google US English'
-  ];
+  const preferred = ['Reed (英语（美国）)','Grandpa (英语（美国）)','Rocko (英语（美国）)','Reed','Grandpa','Fred','Google US English'];
   let picked = null;
   for (const name of preferred) {
     picked = voices.find(v => v.name === name || v.name.includes(name));
     if (picked) break;
   }
   if (!picked) picked = voices.find(v => v.lang === 'en-US');
-  if (picked) {
-    u.voice = picked;
-    // Reed is already a natural male voice; don't over-lower pitch
-    u.pitch = picked.name.includes('Reed') ? 0.85 : 0.65;
-  }
-
+  if (picked) { u.voice = picked; u.pitch = picked.name.includes('Reed') ? 0.85 : 0.65; }
   window.speechSynthesis.speak(u);
 }
+
+function playPhoneme(letter) {
+  _speak(_phonemeMap[letter] || letter, 0.55);
+}
+
+function playWord(text) {
+  _speak(text, 0.78);
+}
+
 
 function showPath(id) {
   document.querySelectorAll('.path-section').forEach(s => s.classList.remove('active'));

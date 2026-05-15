@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WFD 高频练习 — 大骐英语</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #ffffff; --bg-alt: #f6f8fa; --fg: #1f2328; --fg-soft: #59636e;
+      --fg-mute: #848e98; --line: #d1d9e0; --line-soft: #eaeef2;
+      --accent: #1f6feb; --green: #1a7f37; --red: #cf222e; --yellow: #9a6700;
+      --radius: 10px;
+      --font: "Inter","Noto Sans SC",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: var(--font); background: var(--bg); color: var(--fg);
+           font-size: 15px; -webkit-font-smoothing: antialiased; }
+
+    /* Nav */
+    .nav { position: sticky; top: 0; z-index: 10; background: rgba(255,255,255,.9);
+           backdrop-filter: blur(12px); border-bottom: 1px solid var(--line-soft);
+           padding: 14px 24px; display: flex; align-items: center; gap: 16px; }
+    .nav a { color: var(--fg); font-weight: 600; text-decoration: none; font-size: 15px; }
+    .nav-right { margin-left: auto; display: flex; gap: 12px; align-items: center; }
+    .badge { background: var(--bg-alt); border: 1px solid var(--line); border-radius: 20px;
+             padding: 4px 12px; font-size: 13px; font-weight: 500; color: var(--fg-soft); }
+    .badge span { color: var(--fg); font-weight: 700; }
+
+    /* Main layout */
+    .main { max-width: 760px; margin: 0 auto; padding: 40px 24px 80px; }
+
+    /* Progress bar */
+    .progress-wrap { margin-bottom: 32px; }
+    .progress-label { font-size: 13px; color: var(--fg-mute); margin-bottom: 8px;
+                      display: flex; justify-content: space-between; }
+    .progress-bar { height: 4px; background: var(--line-soft); border-radius: 4px; overflow: hidden; }
+    .progress-fill { height: 100%; background: var(--accent); border-radius: 4px;
+                     transition: width .4s ease; }
+
+    /* Card */
+    .card { border: 1px solid var(--line-soft); border-radius: 14px; overflow: hidden;
+            box-shadow: 0 1px 4px rgba(31,35,40,.06); }
+    .card-header { background: var(--bg-alt); padding: 16px 24px;
+                   display: flex; align-items: center; gap: 12px;
+                   border-bottom: 1px solid var(--line-soft); }
+    .q-num { font-size: 13px; font-weight: 600; color: var(--fg-mute); }
+    .q-id  { font-size: 12px; color: var(--fg-mute); margin-left: auto; }
+    .card-body { padding: 28px 24px; }
+
+    /* Audio player */
+    .audio-zone { display: flex; align-items: center; gap: 16px; margin-bottom: 28px;
+                  padding: 16px 20px; background: var(--bg-alt); border-radius: 10px;
+                  border: 1px solid var(--line-soft); }
+    .play-btn { width: 48px; height: 48px; border-radius: 50%; border: none; cursor: pointer;
+                background: var(--fg); color: #fff; display: flex; align-items: center;
+                justify-content: center; flex-shrink: 0; transition: transform .15s, background .15s; }
+    .play-btn:hover { background: #000; transform: scale(1.05); }
+    .play-btn svg { width: 20px; height: 20px; }
+    .audio-info { flex: 1; }
+    .audio-hint { font-size: 13px; color: var(--fg-mute); }
+    .audio-status { font-size: 12px; color: var(--accent); margin-top: 3px; min-height: 16px; }
+    .play-count { font-size: 12px; color: var(--fg-mute); text-align: right;
+                  background: var(--bg); border: 1px solid var(--line); border-radius: 6px;
+                  padding: 4px 10px; white-space: nowrap; }
+
+    /* Input area */
+    .input-label { font-size: 13px; font-weight: 500; color: var(--fg-soft); margin-bottom: 8px; }
+    textarea { width: 100%; border: 1.5px solid var(--line); border-radius: 8px; padding: 14px;
+               font-size: 16px; font-family: var(--font); resize: none; height: 80px;
+               transition: border-color .15s; outline: none; color: var(--fg); }
+    textarea:focus { border-color: var(--accent); }
+    textarea::placeholder { color: var(--fg-mute); }
+
+    /* Buttons row */
+    .btn-row { display: flex; gap: 10px; margin-top: 16px; flex-wrap: wrap; }
+    .btn { padding: 9px 18px; border-radius: 8px; font-size: 14px; font-weight: 500;
+           border: 1px solid transparent; cursor: pointer; transition: all .15s; }
+    .btn-primary { background: var(--fg); color: #fff; }
+    .btn-primary:hover { background: #000; }
+    .btn-ghost   { background: transparent; color: var(--fg); border-color: var(--line); }
+    .btn-ghost:hover { background: var(--bg-alt); }
+    .btn-sm { padding: 6px 14px; font-size: 13px; }
+    .btn:disabled { opacity: .4; cursor: not-allowed; }
+
+    /* Result */
+    .result { margin-top: 20px; padding: 16px 20px; border-radius: 10px; display: none; }
+    .result.correct { background: #dafbe1; border: 1px solid #aceebb; }
+    .result.wrong   { background: #fff8c5; border: 1px solid #f5ca00; }
+    .result-title { font-weight: 600; font-size: 14px; margin-bottom: 10px; }
+    .result.correct .result-title { color: var(--green); }
+    .result.wrong   .result-title { color: var(--yellow); }
+    .word-row { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 12px; }
+    .word { padding: 2px 8px; border-radius: 5px; font-size: 15px; }
+    .word.ok    { background: #ccffd8; color: #116329; }
+    .word.miss  { background: #ffebe9; color: #a40e26; text-decoration: line-through; }
+    .word.extra { background: #fff3b0; color: #804400; }
+    .answer-full { font-size: 14px; color: var(--fg-soft); margin-top: 8px; }
+    .answer-full strong { color: var(--fg); }
+    .translation { font-size: 13px; color: var(--fg-mute); margin-top: 6px; }
+    .score-line { font-size: 13px; color: var(--fg-soft); margin-top: 8px; }
+
+    /* Navigation footer */
+    .nav-footer { display: flex; align-items: center; gap: 12px; margin-top: 28px; }
+    .nav-footer .spacer { flex: 1; }
+
+    /* Mode switcher */
+    .mode-bar { display: flex; gap: 8px; margin-bottom: 28px; }
+    .mode-btn { padding: 6px 14px; border-radius: 6px; font-size: 13px; font-weight: 500;
+                border: 1px solid var(--line); cursor: pointer; background: var(--bg); color: var(--fg-soft); }
+    .mode-btn.active { background: var(--fg); color: #fff; border-color: var(--fg); }
+
+    /* Stats panel */
+    .stats { display: flex; gap: 16px; margin-bottom: 28px; }
+    .stat { flex: 1; padding: 14px 16px; border: 1px solid var(--line-soft); border-radius: 10px;
+            text-align: center; }
+    .stat-num { font-size: 22px; font-weight: 700; }
+    .stat-label { font-size: 12px; color: var(--fg-mute); margin-top: 2px; }
+    .stat.green .stat-num { color: var(--green); }
+    .stat.red   .stat-num { color: var(--red); }
+
+    /* Empty audio notice */
+    .no-audio { font-size: 13px; color: var(--fg-mute); font-style: italic; }
+  </style>
+</head>
+<body>
+<nav class="nav">
+  <a href="index.html">大骐英语</a>
+  <span style="color:var(--fg-mute)">›</span>
+  <span style="color:var(--fg-soft); font-size:14px;">WFD 高频练习</span>
+  <div class="nav-right">
+    <span class="badge">本次 <span id="session-score">0</span> 分</span>
+    <span class="badge">完成 <span id="done-count">0</span> / 178</span>
+  </div>
+</nav>
+
+<div class="main">
+  <div class="stats">
+    <div class="stat green"><div class="stat-num" id="correct-num">0</div><div class="stat-label">答对</div></div>
+    <div class="stat red">  <div class="stat-num" id="wrong-num">0</div><div class="stat-label">答错</div></div>
+    <div class="stat">      <div class="stat-num" id="pct-num">—</div><div class="stat-label">正确率</div></div>
+  </div>
+
+  <div class="mode-bar">
+    <button class="mode-btn active" onclick="setMode('seq')" id="mode-seq">顺序练习</button>
+    <button class="mode-btn" onclick="setMode('shuffle')" id="mode-shuffle">随机练习</button>
+    <button class="mode-btn" onclick="setMode('wrong')" id="mode-wrong">错题复习</button>
+  </div>
+
+  <div class="progress-wrap">
+    <div class="progress-label">
+      <span id="q-progress">第 1 题，共 178 题</span>
+      <span id="q-label"></span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <span class="q-num" id="q-num-label">第 1 题</span>
+      <span class="q-id" id="q-id-label">#—</span>
+    </div>
+    <div class="card-body">
+      <div class="audio-zone">
+        <button class="play-btn" id="play-btn" onclick="playAudio()">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        </button>
+        <div class="audio-info">
+          <div class="audio-hint">点击播放音频，然后听写出你听到的句子</div>
+          <div class="audio-status" id="audio-status"></div>
+        </div>
+        <div class="play-count">播放 <span id="play-times">0</span> 次</div>
+      </div>
+
+      <div class="input-label">你听到的内容：</div>
+      <textarea id="answer-input" placeholder="输入你听到的句子……" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
+
+      <div class="btn-row">
+        <button class="btn btn-primary" id="check-btn" onclick="checkAnswer()">提交答案</button>
+        <button class="btn btn-ghost btn-sm" onclick="showAnswer()">显示答案</button>
+        <button class="btn btn-ghost btn-sm" onclick="skipQuestion()">跳过 →</button>
+      </div>
+
+      <div class="result" id="result-box">
+        <div class="result-title" id="result-title"></div>
+        <div class="word-row" id="word-row"></div>
+        <div class="answer-full" id="answer-full"></div>
+        <div class="translation" id="translation"></div>
+        <div class="score-line" id="score-line"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="nav-footer">
+    <button class="btn btn-ghost btn-sm" onclick="prevQuestion()">← 上一题</button>
+    <span class="spacer"></span>
+    <button class="btn btn-ghost btn-sm" onclick="nextQuestion()">下一题 →</button>
+  </div>
+</div>
+
+<audio id="audio-el"></audio>
+
+<script>
+// ── Data ──────────────────────────────────────────────────────────────
+let WFD = [];
+let queue = [];
+let cursor = 0;
+let correct = 0, wrong = 0, done = 0;
+let mode = 'seq';
+let wrongSet = [];
+let playTimes = 0;
+let answered = {};   // index in WFD → {score, correct}
+
+fetch('wfd_data.json')
+  .then(r => r.json())
+  .then(data => {
+    WFD = data;
+    buildQueue();
+    renderQuestion();
+  });
+
+function buildQueue() {
+  if (mode === 'seq')     queue = WFD.map((_, i) => i);
+  if (mode === 'shuffle') { queue = WFD.map((_, i) => i); shuffle(queue); }
+  if (mode === 'wrong')   queue = wrongSet.length ? [...wrongSet] : WFD.map((_, i) => i);
+  cursor = 0;
+}
+
+function shuffle(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+}
+
+function setMode(m) {
+  mode = m;
+  ['seq','shuffle','wrong'].forEach(k => {
+    document.getElementById('mode-'+k).classList.toggle('active', k === m);
+  });
+  buildQueue();
+  renderQuestion();
+}
+
+// ── Render ────────────────────────────────────────────────────────────
+function renderQuestion() {
+  if (!WFD.length) return;
+  const idx = queue[cursor];
+  const item = WFD[idx];
+
+  document.getElementById('q-num-label').textContent = `第 ${cursor + 1} 题`;
+  document.getElementById('q-id-label').textContent  = `#${item.id}`;
+  document.getElementById('q-progress').textContent  = `第 ${cursor + 1} 题，共 ${queue.length} 题`;
+  document.getElementById('progress-fill').style.width = `${((cursor) / queue.length) * 100}%`;
+  document.getElementById('answer-input').value = '';
+  document.getElementById('answer-input').disabled = false;
+  document.getElementById('check-btn').disabled = false;
+  document.getElementById('result-box').style.display = 'none';
+  document.getElementById('audio-status').textContent = '';
+  playTimes = 0;
+  document.getElementById('play-times').textContent = '0';
+
+  // Setup audio
+  const audio = document.getElementById('audio-el');
+  if (item.audio) {
+    audio.src = `audio/${item.audio}`;
+    document.getElementById('play-btn').disabled = false;
+  } else {
+    audio.src = '';
+    document.getElementById('play-btn').disabled = true;
+    document.getElementById('audio-status').textContent = '（此题暂无音频）';
+  }
+
+  document.getElementById('answer-input').focus();
+}
+
+// ── Audio ─────────────────────────────────────────────────────────────
+function playAudio() {
+  const audio = document.getElementById('audio-el');
+  audio.currentTime = 0;
+  audio.play();
+  playTimes++;
+  document.getElementById('play-times').textContent = playTimes;
+  document.getElementById('audio-status').textContent = '▶ 播放中…';
+  audio.onended = () => { document.getElementById('audio-status').textContent = '已播完，请听写'; };
+}
+
+// ── Check ─────────────────────────────────────────────────────────────
+function normalise(str) {
+  return str.toLowerCase()
+    .replace(/[.,!?;:'"""''()\[\]-]/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function checkAnswer() {
+  const idx = queue[cursor];
+  const item = WFD[idx];
+  const input = document.getElementById('answer-input').value;
+  if (!input.trim()) { alert('请先输入你听到的内容！'); return; }
+
+  const correctWords = normalise(item.en).split(' ');
+  const userWords    = normalise(input).split(' ');
+
+  // Word-by-word scoring (PTE-style: each correct word = 1 point)
+  const correctSet = new Set(correctWords);
+  let hits = 0;
+  userWords.forEach(w => { if (correctSet.has(w)) hits++; });
+  // Penalty for wrong words
+  const extras = userWords.filter(w => !correctSet.has(w)).length;
+  const score = Math.max(0, hits - extras);
+  const maxScore = correctWords.length;
+  const isFullMark = normalise(input) === normalise(item.en);
+
+  // Build word diff display
+  const wordRow = document.getElementById('word-row');
+  wordRow.innerHTML = '';
+  correctWords.forEach(w => {
+    const span = document.createElement('span');
+    span.className = 'word ' + (userWords.includes(w) ? 'ok' : 'miss');
+    span.textContent = w;
+    wordRow.appendChild(span);
+  });
+  userWords.forEach(w => {
+    if (!correctSet.has(w) && w) {
+      const span = document.createElement('span');
+      span.className = 'word extra';
+      span.textContent = w;
+      wordRow.appendChild(span);
+    }
+  });
+
+  const box = document.getElementById('result-box');
+  box.className = 'result ' + (isFullMark ? 'correct' : 'wrong');
+  box.style.display = 'block';
+
+  document.getElementById('result-title').textContent = isFullMark
+    ? '✓ 完全正确！' : `得分：${score} / ${maxScore}`;
+  document.getElementById('answer-full').innerHTML =
+    `<strong>正确答案：</strong>${item.en}`;
+  document.getElementById('translation').textContent = item.zh ? `译：${item.zh}` : '';
+  document.getElementById('score-line').textContent =
+    `绿色 = 写对的词　红色划线 = 漏写的词　黄色 = 多写的词`;
+
+  // Track stats
+  if (!answered[idx]) {
+    answered[idx] = true;
+    done++;
+    if (isFullMark) { correct++; } else { wrong++; if (!wrongSet.includes(idx)) wrongSet.push(idx); }
+    updateStats();
+  }
+
+  document.getElementById('answer-input').disabled = true;
+  document.getElementById('check-btn').disabled = true;
+}
+
+function showAnswer() {
+  const idx = queue[cursor];
+  const item = WFD[idx];
+  document.getElementById('answer-input').value = item.en;
+  document.getElementById('answer-input').disabled = true;
+}
+
+function updateStats() {
+  document.getElementById('correct-num').textContent = correct;
+  document.getElementById('wrong-num').textContent   = wrong;
+  document.getElementById('done-count').textContent  = done;
+  document.getElementById('session-score').textContent = correct;
+  document.getElementById('pct-num').textContent = done
+    ? Math.round((correct / done) * 100) + '%' : '—';
+}
+
+// ── Navigation ────────────────────────────────────────────────────────
+function nextQuestion() {
+  if (cursor < queue.length - 1) { cursor++; renderQuestion(); }
+  else { alert('本轮练习已完成！可以切换到"错题复习"模式重练错题。'); }
+}
+function prevQuestion() {
+  if (cursor > 0) { cursor--; renderQuestion(); }
+}
+function skipQuestion() { nextQuestion(); }
+
+// ── Keyboard shortcuts ────────────────────────────────────────────────
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && e.ctrlKey) { checkAnswer(); }
+  if (e.key === 'ArrowRight' && e.ctrlKey) { nextQuestion(); }
+  if (e.key === 'ArrowLeft'  && e.ctrlKey) { prevQuestion(); }
+  if (e.key === ' ' && e.ctrlKey) { e.preventDefault(); playAudio(); }
+});
+</script>
+</body>
+</html>

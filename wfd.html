@@ -49,6 +49,9 @@
     .cat-count{font-size:12px;color:var(--fg-mute);background:var(--bg);
                border:1px solid var(--line);border-radius:10px;padding:1px 7px;flex-shrink:0;}
     .sidebar-sep{height:1px;background:var(--line-soft);margin:8px 0;}
+    .index-row{padding:10px;border-bottom:1px solid var(--line-soft);display:flex;gap:8px;align-items:center;cursor:pointer;font-size:14px}
+    .index-row:hover{background:var(--line-soft)}
+    .q-preview{padding:12px;border-radius:8px;background:linear-gradient(180deg,#fff,#fbfdff);border:1px solid var(--line-soft);margin-bottom:14px}
 
     /* ── Main ── */
     .main{padding:28px 32px 80px;max-width:720px;}
@@ -177,6 +180,12 @@
   <!-- Sidebar: category filter -->
   <aside class="sidebar">
     <div class="sidebar-title">话题场景</div>
+    <button class="cat-btn" style="width:100%;" onclick="toggleIndex()">📑 题目索引（点击跳题）</button>
+    <div id="q-index" style="padding:8px 12px;display:none;">
+      <input id="q-filter" placeholder="筛选（按 id 或关键词）" style="width:100%;padding:10px;border:1px solid var(--line);border-radius:8px;margin-bottom:10px;font-size:14px;">
+      <div id="q-list" style="max-height:360px;overflow:auto;"></div>
+    </div>
+    <div class="sidebar-sep"></div>
     <button class="cat-btn active" data-cat="全部" onclick="setCategory('全部')">
       全部题目 <span class="cat-count" id="cnt-全部">178</span>
     </button>
@@ -209,12 +218,6 @@
     <button class="cat-btn" data-cat="❌ 错题" onclick="setCategory('❌ 错题')">
       ❌ 错题复习 <span class="cat-count" id="cnt-错题">0</span>
     </button>
-    <div class="sidebar-sep"></div>
-    <button class="cat-btn" style="width:100%;" onclick="toggleIndex()">📑 题目索引（点击跳题）</button>
-    <div id="q-index" style="padding:8px 12px;display:none;">
-      <input id="q-filter" placeholder="筛选（按 id 或关键词）" style="width:100%;padding:8px;border:1px solid var(--line);border-radius:8px;margin-bottom:8px;font-size:13px;">
-      <div id="q-list" style="max-height:320px;overflow:auto;"></div>
-    </div>
     <div style="padding:10px 16px;margin-top:auto;">
       <button class="btn btn-ghost btn-sm" style="width:100%" onclick="shuffleQueue()">🔀 随机顺序</button>
     </div>
@@ -244,8 +247,9 @@
       </div>
       <div class="card-body">
 
-        <!-- Audio -->
-        <div class="audio-zone">
+          <div id="q-preview" class="q-preview" style="display:none;"></div>
+          <!-- Audio -->
+          <div class="audio-zone">
           <button class="play-btn" id="play-btn" onclick="playAudio()">
             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
           </button>
@@ -376,23 +380,10 @@ function buildIndex() {
   container.innerHTML = '';
   WFD.forEach((it, idx) => {
     const row = document.createElement('div');
-    row.style.padding = '6px 6px';
-    row.style.borderBottom = '1px solid var(--line-soft)';
-    row.style.fontSize = '13px';
-    row.style.display = 'flex';
-    row.style.alignItems = 'center';
-    row.style.justifyContent = 'space-between';
-    const left = document.createElement('div');
-    left.style.flex = '1';
-    left.style.minWidth = '0';
-    left.innerHTML = `<div style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;"><b>#${it.id}</b> — ${it.en}</div>`;
-    const btn = document.createElement('button');
-    btn.className = 'btn btn-ghost btn-sm';
-    btn.style.marginLeft = '8px';
-    btn.textContent = '跳转';
-    btn.onclick = () => jumpToId(it.id);
-    row.appendChild(left);
-    row.appendChild(btn);
+    row.className = 'index-row';
+    row.dataset.id = it.id;
+    row.innerHTML = `<div style="flex:1;min-width:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;"><b>#${it.id}</b> — ${it.en}</div><div style="flex-shrink:0"><button class='btn btn-ghost btn-sm'>跳转</button></div>`;
+    row.onclick = (e) => { if (e.target.tagName !== 'BUTTON') jumpToId(it.id); else jumpToId(it.id); };
     container.appendChild(row);
   });
 
@@ -403,7 +394,7 @@ function buildIndex() {
       const v = this.value.trim().toLowerCase();
       Array.from(container.children).forEach(div => {
         const txt = div.innerText.toLowerCase();
-        div.style.display = txt.includes(v) ? 'flex' : 'none';
+        div.style.display = txt.includes(v) ? '' : 'none';
       });
     });
   }
@@ -436,11 +427,22 @@ function jumpToId(id) {
   const finalPos = queue.indexOf(idx);
   if (finalPos === -1) return alert('该题目不在当前过滤中');
   cursor = finalPos; renderQ();
+  // show preview of full sentence (non-scoring preview)
+  const item = WFD[queue[cursor]];
+  const pv = document.getElementById('q-preview');
+  if (pv) {
+    pv.innerHTML = `<div style="font-size:15px;color:var(--fg);">${item.en}</div><div style="margin-top:8px;text-align:right"><button class="btn btn-sm" onclick="hidePreview()">隐藏</button></div>`;
+    pv.style.display = 'block';
+    // scroll main area so preview is visible
+    setTimeout(()=>{ document.querySelector('.main').scrollTop = 0; window.scrollTo({top:document.querySelector('.main').getBoundingClientRect().top + window.scrollY - 20, behavior:'smooth'}); }, 50);
+  }
   // close index on mobile
   const el = document.getElementById('q-index'); if (el) el.style.display = 'none';
   // update hash
   location.hash = `id=${id}`;
 }
+
+function hidePreview(){ const pv = document.getElementById('q-preview'); if(pv) pv.style.display='none'; }
 
 // ─── Render ──────────────────────────────────────────────────────────
 function renderQ() {

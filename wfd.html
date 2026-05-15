@@ -209,6 +209,12 @@
     <button class="cat-btn" data-cat="❌ 错题" onclick="setCategory('❌ 错题')">
       ❌ 错题复习 <span class="cat-count" id="cnt-错题">0</span>
     </button>
+    <div class="sidebar-sep"></div>
+    <button class="cat-btn" style="width:100%;" onclick="toggleIndex()">📑 题目索引（点击跳题）</button>
+    <div id="q-index" style="padding:8px 12px;display:none;">
+      <input id="q-filter" placeholder="筛选（按 id 或关键词）" style="width:100%;padding:8px;border:1px solid var(--line);border-radius:8px;margin-bottom:8px;font-size:13px;">
+      <div id="q-list" style="max-height:320px;overflow:auto;"></div>
+    </div>
     <div style="padding:10px 16px;margin-top:auto;">
       <button class="btn btn-ghost btn-sm" style="width:100%" onclick="shuffleQueue()">🔀 随机顺序</button>
     </div>
@@ -306,9 +312,19 @@ fetch('wfd_data.json')
       catCounts[item.category] = (catCounts[item.category] || 0) + 1;
     });
     updateCatCounts();
+    buildIndex();
     buildQueue();
     renderQ();
   });
+
+// support hash jump like #id=23395 on initial load
+window.addEventListener('load', () => {
+  if (!WFD.length) return;
+  const h = location.hash.replace('#','');
+  if (!h) return;
+  const m = h.match(/id=(\d+)/);
+  if (m) jumpToId(m[1]);
+});
 
 // ─── Category ────────────────────────────────────────────────────────
 function updateCatCounts() {
@@ -352,6 +368,78 @@ function shuffleQueue() {
     [queue[i], queue[j]] = [queue[j], queue[i]];
   }
   cursor = 0; renderQ();
+}
+
+// ─── Index / Jump ─────────────────────────────────────────────────────
+function buildIndex() {
+  const container = document.getElementById('q-list');
+  container.innerHTML = '';
+  WFD.forEach((it, idx) => {
+    const row = document.createElement('div');
+    row.style.padding = '6px 6px';
+    row.style.borderBottom = '1px solid var(--line-soft)';
+    row.style.fontSize = '13px';
+    row.style.display = 'flex';
+    row.style.alignItems = 'center';
+    row.style.justifyContent = 'space-between';
+    const left = document.createElement('div');
+    left.style.flex = '1';
+    left.style.minWidth = '0';
+    left.innerHTML = `<div style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;"><b>#${it.id}</b> — ${it.en}</div>`;
+    const btn = document.createElement('button');
+    btn.className = 'btn btn-ghost btn-sm';
+    btn.style.marginLeft = '8px';
+    btn.textContent = '跳转';
+    btn.onclick = () => jumpToId(it.id);
+    row.appendChild(left);
+    row.appendChild(btn);
+    container.appendChild(row);
+  });
+
+  // filter input
+  const qf = document.getElementById('q-filter');
+  if (qf) {
+    qf.addEventListener('input', function() {
+      const v = this.value.trim().toLowerCase();
+      Array.from(container.children).forEach(div => {
+        const txt = div.innerText.toLowerCase();
+        div.style.display = txt.includes(v) ? 'flex' : 'none';
+      });
+    });
+  }
+}
+
+function toggleIndex() {
+  const el = document.getElementById('q-index');
+  if (!el) return;
+  el.style.display = el.style.display === 'none' ? 'block' : 'none';
+}
+
+function jumpToId(id) {
+  // find index in WFD
+  const idx = WFD.findIndex(it => String(it.id) === String(id));
+  if (idx === -1) return alert('未找到题目 ' + id);
+  // ensure queue contains this idx (set category to its category)
+  const cat = WFD[idx].category || '全部';
+  if (currentCat !== cat && currentCat !== '全部') {
+    // if current category doesn't include it, switch to its category
+    setCategory(cat);
+  } else {
+    // rebuild queue to be safe
+    buildQueue();
+  }
+  const pos = queue.indexOf(idx);
+  if (pos === -1) {
+    // maybe current cat is '全部'
+    setCategory('全部');
+  }
+  const finalPos = queue.indexOf(idx);
+  if (finalPos === -1) return alert('该题目不在当前过滤中');
+  cursor = finalPos; renderQ();
+  // close index on mobile
+  const el = document.getElementById('q-index'); if (el) el.style.display = 'none';
+  // update hash
+  location.hash = `id=${id}`;
 }
 
 // ─── Render ──────────────────────────────────────────────────────────

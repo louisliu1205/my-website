@@ -144,15 +144,15 @@
 <div class="container" style="padding-top:32px;padding-bottom:80px;">
 
   <div class="path-tabs">
-    <button class="path-tab active" onclick="showPath('zero')">🔤 零基础发音</button>
-    <button class="path-tab" onclick="showPath('speaking')">🎙️ PTE 口语</button>
+    <button class="path-tab active" onclick="showPath('speaking')">🎙️ PTE 口语</button>
     <button class="path-tab" onclick="showPath('listening')">👂 PTE 听力</button>
     <button class="path-tab" onclick="showPath('writing')">✍️ PTE 写作</button>
     <button class="path-tab" onclick="showPath('strategy')">🎯 考试策略</button>
+    <button class="path-tab" onclick="showPath('zero')">🔤 零基础发音</button>
   </div>
 
   <!-- ═══ PATH: 零基础发音 ═══ -->
-  <div class="path-section active" id="path-zero">
+  <div class="path-section" id="path-zero">
     <div class="sec-hdr">
       <span class="sec-title">零基础自然拼读</span>
       <span class="sec-sub">共 5 课 · 建议 2 周内完成</span>
@@ -281,7 +281,7 @@
   </div><!-- /path-zero -->
 
   <!-- ═══ PATH: PTE 口语 ═══ -->
-  <div class="path-section" id="path-speaking">
+  <div class="path-section active" id="path-speaking">
     <div class="cards">
 
       <div class="card">
@@ -738,7 +738,7 @@ function showPath(id) {
   document.querySelectorAll('.path-section').forEach(s => s.classList.remove('active'));
   document.querySelectorAll('.path-tab').forEach(b => b.classList.remove('active'));
   document.getElementById('path-' + id).classList.add('active');
-  const tabs = ['zero','speaking','listening','writing','strategy'];
+  const tabs = ['speaking','listening','writing','strategy','zero'];
   const idx = tabs.indexOf(id);
   document.querySelectorAll('.path-tab')[idx].classList.add('active');
   window.scrollTo({top: 0, behavior:'smooth'});

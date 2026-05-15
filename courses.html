@@ -934,12 +934,48 @@ In summary, the lecture gives information about <span class="placeholder">【主
 </div><!-- /container -->
 
 <script>
+// Preload voices (Chrome loads them async)
+let _cachedVoices = [];
+if (window.speechSynthesis) {
+  window.speechSynthesis.onvoiceschanged = function() {
+    _cachedVoices = window.speechSynthesis.getVoices();
+  };
+  _cachedVoices = window.speechSynthesis.getVoices();
+}
+
 function playWord(word) {
   if (!window.speechSynthesis) return;
   window.speechSynthesis.cancel();
   const u = new SpeechSynthesisUtterance(word);
   u.lang = 'en-US';
-  u.rate = 0.75;
+  u.rate = 0.78;
+  u.pitch = 0.5; // deeper voice
+
+  const voices = _cachedVoices.length ? _cachedVoices : window.speechSynthesis.getVoices();
+  // Prefer good male American voices by name
+  // Prefer deep male US voices available on macOS/Chrome
+  const preferred = [
+    'Reed (英语（美国）)',
+    'Grandpa (英语（美国）)',
+    'Rocko (英语（美国）)',
+    'Reed',
+    'Grandpa',
+    'Rocko',
+    'Fred',
+    'Google US English'
+  ];
+  let picked = null;
+  for (const name of preferred) {
+    picked = voices.find(v => v.name === name || v.name.includes(name));
+    if (picked) break;
+  }
+  if (!picked) picked = voices.find(v => v.lang === 'en-US');
+  if (picked) {
+    u.voice = picked;
+    // Reed is already a natural male voice; don't over-lower pitch
+    u.pitch = picked.name.includes('Reed') ? 0.85 : 0.65;
+  }
+
   window.speechSynthesis.speak(u);
 }
 

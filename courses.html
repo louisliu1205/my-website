@@ -144,15 +144,21 @@
 <div class="container" style="padding-top:32px;padding-bottom:80px;">
 
   <div class="path-tabs">
-    <button class="path-tab active" onclick="showPath('speaking')">🎙️ PTE 口语</button>
-    <button class="path-tab" onclick="showPath('listening')">👂 PTE 听力</button>
-    <button class="path-tab" onclick="showPath('writing')">✍️ PTE 写作</button>
-    <button class="path-tab" onclick="showPath('strategy')">🎯 考试策略</button>
-    <button class="path-tab" onclick="showPath('zero')">🔤 零基础发音</button>
+    <button class="path-tab active" data-path="zero" onclick="showPath('zero')">🔤 零基础发音</button>
+    <button class="path-tab" data-path="pte" onclick="showPath('pte')">🎓 PTE 综合</button>
+    <button class="path-tab" data-path="ielts" onclick="showPath('ielts')">📝 IELTS 雅思</button>
+    <button class="path-tab" data-path="strategy" onclick="showPath('strategy')">🎯 考试策略</button>
+  </div>
+
+  <!-- PTE 子标签（仅在 PTE 主项激活时显示） -->
+  <div id="pte-subtabs" class="path-tabs" style="display:none; margin-top:12px;">
+    <button class="path-tab" data-path="speaking" onclick="showPTESub('speaking')">🎙️ 口语</button>
+    <button class="path-tab" data-path="listening" onclick="showPTESub('listening')">👂 听力</button>
+    <button class="path-tab" data-path="writing" onclick="showPTESub('writing')">✍️ 写作</button>
   </div>
 
   <!-- ═══ PATH: 零基础发音 ═══ -->
-  <div class="path-section" id="path-zero">
+  <div class="path-section active" id="path-zero">
     <div class="sec-hdr">
       <span class="sec-title">零基础自然拼读</span>
       <span class="sec-sub">共 5 课 · 建议 2 周内完成</span>
@@ -280,8 +286,36 @@
     </div>
   </div><!-- /path-zero -->
 
+  <!-- ═══ PATH: IELTS（占位） ═══ -->
+  <div class="path-section" id="path-ielts" style="display:none;">
+    <div class="sec-hdr">
+      <span class="sec-title">IELTS 雅思</span>
+      <span class="sec-sub">听/说/读/写 四技能 · 体系化练习</span>
+    </div>
+    <div class="cards">
+      <div class="card">
+        <div class="card-top">
+          <span class="card-icon">🎧</span>
+          <span class="card-tag tag-listening">听力 · 基础练习</span>
+          <h3>听力分项训练</h3>
+          <p>从抓取关键词到做笔记，循序渐进的听力训练。</p>
+        </div>
+        <div class="card-bot"><span class="card-meta">适合雅思考生</span></div>
+      </div>
+      <div class="card">
+        <div class="card-top">
+          <span class="card-icon">🗣️</span>
+          <span class="card-tag tag-speaking">口语 · 话题模板</span>
+          <h3>口语流利度训练</h3>
+          <p>常考话题模板 + 即兴表达训练，提升连贯性与词汇使用。</p>
+        </div>
+        <div class="card-bot"><span class="card-meta">适用于 4-7 分段提升</span></div>
+      </div>
+    </div>
+  </div>
+
   <!-- ═══ PATH: PTE 口语 ═══ -->
-  <div class="path-section active" id="path-speaking">
+  <div class="path-section" id="path-speaking">
     <div class="cards">
 
       <div class="card">
@@ -541,7 +575,7 @@ Thank you for your help!</div>
   </div><!-- /path-speaking -->
 
   <!-- ═══ PATH: 听力 ═══ -->
-  <div class="path-section" id="path-listening">
+  <div class="path-section" id="path-listening" style="display:none;">
     <div class="sec-hdr">
       <span class="sec-title">PTE 听力题型</span>
       <span class="sec-sub">WFD 是重中之重</span>
@@ -620,7 +654,7 @@ Thank you for your help!</div>
   </div><!-- /path-listening -->
 
   <!-- ═══ PATH: 写作 ═══ -->
-  <div class="path-section" id="path-writing">
+  <div class="path-section" id="path-writing" style="display:none;">
     <div class="cards">
       <div class="card">
         <div class="card-top">
@@ -737,10 +771,44 @@ In summary, the lecture gives information about <span class="placeholder">【主
 function showPath(id) {
   document.querySelectorAll('.path-section').forEach(s => s.classList.remove('active'));
   document.querySelectorAll('.path-tab').forEach(b => b.classList.remove('active'));
-  document.getElementById('path-' + id).classList.add('active');
-  const tabs = ['speaking','listening','writing','strategy','zero'];
-  const idx = tabs.indexOf(id);
-  document.querySelectorAll('.path-tab')[idx].classList.add('active');
+  // hide pte subtabs by default
+  document.getElementById('pte-subtabs').style.display = 'none';
+  // show the requested path
+  if (id === 'pte') {
+    // show speaking section by default
+    document.getElementById('path-speaking').classList.add('active');
+    document.getElementById('path-speaking').style.display = '';
+    // hide others
+    document.getElementById('path-listening').style.display = 'none';
+    document.getElementById('path-writing').style.display = 'none';
+    // reveal pte subtabs
+    document.getElementById('pte-subtabs').style.display = '';
+    // mark main PTE tab active
+    document.querySelectorAll('.path-tab').forEach(b => b.classList.toggle('active', b.dataset.path === 'pte'));
+  } else {
+    // Normal mapping: show matching section if exists
+    const section = document.getElementById('path-' + id);
+    if (section) {
+      section.classList.add('active');
+      section.style.display = '';
+    }
+    document.querySelectorAll('.path-tab').forEach(b => b.classList.toggle('active', b.dataset.path === id));
+  }
+  window.scrollTo({top: 0, behavior:'smooth'});
+}
+
+function showPTESub(id){
+  // show corresponding PTE section: speaking/listening/writing
+  document.getElementById('path-speaking').classList.remove('active');
+  document.getElementById('path-listening').classList.remove('active');
+  document.getElementById('path-writing').classList.remove('active');
+  document.getElementById('path-speaking').style.display = 'none';
+  document.getElementById('path-listening').style.display = 'none';
+  document.getElementById('path-writing').style.display = 'none';
+  const el = document.getElementById('path-' + id);
+  if (el) { el.style.display = ''; el.classList.add('active'); }
+  // set active state for pte subtabs
+  document.querySelectorAll('#pte-subtabs .path-tab').forEach(b => b.classList.toggle('active', b.dataset.path === id));
   window.scrollTo({top: 0, behavior:'smooth'});
 }
 

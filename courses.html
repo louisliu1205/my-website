@@ -147,7 +147,6 @@
     <button class="path-tab active" data-path="zero" onclick="showPath('zero')">🔤 零基础发音</button>
     <button class="path-tab" data-path="pte" onclick="showPath('pte')">🎓 PTE 综合</button>
     <button class="path-tab" data-path="ielts" onclick="showPath('ielts')">📝 IELTS 雅思</button>
-    <button class="path-tab" data-path="strategy" onclick="showPath('strategy')">🎯 考试策略</button>
   </div>
 
   <!-- PTE 子标签（仅在 PTE 主项激活时显示） -->
@@ -155,6 +154,7 @@
     <button class="path-tab" data-path="speaking" onclick="showPTESub('speaking')">🎙️ 口语</button>
     <button class="path-tab" data-path="listening" onclick="showPTESub('listening')">👂 听力</button>
     <button class="path-tab" data-path="writing" onclick="showPTESub('writing')">✍️ 写作</button>
+    <button class="path-tab" data-path="strategy" onclick="showPTESub('strategy')">🎯 考试策略</button>
   </div>
 
   <!-- ═══ PATH: 零基础发音 ═══ -->
@@ -320,6 +320,15 @@
         </div>
         <div class="card-bot"><span class="card-meta">适合 5-7 分学员</span></div>
       </div>
+      <div class="card">
+        <div class="card-top">
+          <span class="card-icon">🎓</span>
+          <span class="card-tag tag-speaking">Paige 口语课</span>
+          <h3>口语真题补强</h3>
+          <p>加入 Lesson 1-4 的高频话题、实用表达和 Part 2/3 4 步结构。</p>
+        </div>
+        <div class="card-bot"><span class="card-meta">直接用教学素材提高答题稳定性</span></div>
+      </div>
     </div>
 
     <div class="lesson-sec">
@@ -373,6 +382,40 @@
           <p><b>identify</b>：In China, I usually see two main types of outdoor markets: food stall markets and antique markets. Food stall markets are popular because people like to shop and eat at the same time.</p>
           <p><b>consider</b>：I think some people feel lonely in big cities because life is more fast-paced and people often keep to themselves. From a social perspective, large cities can have many strangers but fewer close relationships.</p>
           <p><b>speculate</b>：I believe new inventions could help solve global problems by improving communication and resource sharing. For example, smart energy grids can reduce waste and make electricity use more efficient.</p>
+        </div>
+
+        <div class="tip-box">
+          <b>Part 1 高频话题</b>
+          <p>Work/Study、Home/Accommodation、City/Hometown。先回答再补理由，避免说太多空洞感受。</p>
+          <p class="hint">例：I usually study English after dinner because the house is quieter and I can focus better.</p>
+        </div>
+
+        <div class="tip-box">
+          <b>Part 2 四步走</b>
+          <p>1. 说清主题 2. 交代背景 3. 补充细节 4. 总结感受/原因。</p>
+          <div class="template-box">I want to talk about <span class="placeholder">【主题】</span>. I first experienced it when <span class="placeholder">【时间/地点】</span>. What I remember best is <span class="placeholder">【细节】</span>. Overall, <span class="placeholder">【评价/感受】</span>.</div>
+        </div>
+
+        <div class="tip-box">
+          <b>Part 2 常用场景</b>
+          <p>人物类：Who / first impression / what you admire / why he/she matters.</p>
+          <p>旅行类：Where / why you went / what was special / why it was memorable.</p>
+        </div>
+
+        <div class="template-box">I want to talk about a trip that I took to <span class="placeholder">【地点】</span>. It happened in <span class="placeholder">【时间】</span>, and I went there because <span class="placeholder">【原因】</span>. One thing I remember most is <span class="placeholder">【细节】</span>. Overall, it was <span class="placeholder">【评价】</span> because <span class="placeholder">【原因】</span>.</div>
+
+        <div class="tip-box">
+          <b>Part 3 常用词</b>
+          <ul class="checklist">
+            <li>fast-paced life / busy schedule / work extra hours</li>
+            <li>social media / algorithms / impulse buying / online learning</li>
+            <li>environment / climate / public transport / city development</li>
+          </ul>
+        </div>
+
+        <div class="tip-box">
+          <b>Paige 口语课提醒</b>
+          <p>不要追求过于复杂的词。用自己 hold 得住的词，比如 I am a dog person、I am keen on、I’m obsessed with、it is kind of amazing。</p>
         </div>
 
         <div class="tip-box">
@@ -787,9 +830,8 @@ In conclusion, I strongly believe that <span class="placeholder">【重复观点
     </div>
   </div><!-- /path-writing -->
 
-  <!-- ═══ PATH: 策略 ═══ -->
-  <div class="path-section" id="path-strategy">
-    <div class="sec-hdr"><span class="sec-title">考场策略 · 通用原则</span></div>
+  <div class="path-section" id="path-strategy" style="display:none;">
+    <div class="sec-hdr"><span class="sec-title">考场策略 · PTE 专用</span></div>
     <div class="cards">
       <div class="card">
         <div class="card-top">
@@ -874,13 +916,14 @@ function showPath(id) {
 }
 
 function showPTESub(id){
-  // show corresponding PTE section: speaking/listening/writing
-  document.getElementById('path-speaking').classList.remove('active');
-  document.getElementById('path-listening').classList.remove('active');
-  document.getElementById('path-writing').classList.remove('active');
-  document.getElementById('path-speaking').style.display = 'none';
-  document.getElementById('path-listening').style.display = 'none';
-  document.getElementById('path-writing').style.display = 'none';
+  // show corresponding PTE section: speaking/listening/writing/strategy
+  ['speaking','listening','writing','strategy'].forEach(key => {
+    const section = document.getElementById('path-' + key);
+    if (section) {
+      section.classList.remove('active');
+      section.style.display = 'none';
+    }
+  });
   const el = document.getElementById('path-' + id);
   if (el) { el.style.display = ''; el.classList.add('active'); }
   // set active state for pte subtabs

@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>课程体系 — 大骐英语</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    :root{
+      --bg:#fff;--bg-alt:#f6f8fa;--fg:#1f2328;--fg-soft:#59636e;--fg-mute:#848e98;
+      --line:#d1d9e0;--line-soft:#eaeef2;--accent:#1f6feb;
+      --green:#1a7f37;--green-bg:#dafbe1;--orange:#bc4c00;--orange-bg:#fff1e5;
+      --purple:#6639ba;--purple-bg:#f1effd;--red:#cf222e;
+      --font:"Inter","Noto Sans SC",-apple-system,BlinkMacSystemFont,sans-serif;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:var(--font);background:var(--bg);color:var(--fg);
+         font-size:15px;-webkit-font-smoothing:antialiased;line-height:1.6;}
+    a{color:var(--accent);text-decoration:none;}
+
+    /* Nav */
+    .nav{position:sticky;top:0;z-index:10;background:rgba(255,255,255,.92);
+         backdrop-filter:blur(12px);border-bottom:1px solid var(--line-soft);
+         padding:13px 24px;display:flex;align-items:center;gap:12px;}
+    .nav a.brand{color:var(--fg);font-weight:600;font-size:15px;}
+    .nav-sep{color:var(--fg-mute);}
+
+    /* Hero */
+    .hero{padding:64px 0 48px;border-bottom:1px solid var(--line-soft);}
+    .container{max-width:1000px;margin:0 auto;padding:0 24px;}
+    .eyebrow{font-size:12px;font-weight:600;color:var(--fg-mute);letter-spacing:.08em;
+             text-transform:uppercase;margin-bottom:14px;}
+    h1{font-size:clamp(28px,4vw,42px);line-height:1.15;letter-spacing:-.02em;
+       font-weight:700;margin-bottom:16px;}
+    .hero-sub{font-size:16px;color:var(--fg-soft);max-width:600px;}
+
+    /* Path tabs */
+    .path-tabs{display:flex;gap:8px;margin:40px 0 32px;flex-wrap:wrap;}
+    .path-tab{padding:8px 18px;border-radius:20px;border:1px solid var(--line);
+              font-size:14px;font-weight:500;cursor:pointer;background:var(--bg);
+              color:var(--fg-soft);transition:all .15s;}
+    .path-tab:hover,.path-tab.active{background:var(--fg);color:#fff;border-color:var(--fg);}
+
+    /* Section header */
+    .sec-hdr{display:flex;align-items:baseline;gap:12px;margin-bottom:20px;}
+    .sec-title{font-size:19px;font-weight:700;letter-spacing:-.01em;}
+    .sec-sub{font-size:13px;color:var(--fg-mute);}
+
+    /* Card grid */
+    .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;margin-bottom:48px;}
+    .card{border:1px solid var(--line-soft);border-radius:13px;overflow:hidden;
+          transition:all .2s;background:var(--bg);}
+    .card:hover{border-color:var(--line);transform:translateY(-2px);
+                box-shadow:0 6px 20px rgba(31,35,40,.07);}
+    .card-top{padding:20px 20px 14px;}
+    .card-icon{font-size:28px;margin-bottom:12px;display:block;}
+    .card-tag{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
+              padding:2px 8px;border-radius:4px;display:inline-block;margin-bottom:10px;}
+    .tag-phonics{background:#ddf4ff;color:#0969da;}
+    .tag-speaking{background:var(--orange-bg);color:var(--orange);}
+    .tag-listening{background:var(--green-bg);color:var(--green);}
+    .tag-writing{background:var(--purple-bg);color:var(--purple);}
+    .tag-strategy{background:#fff8c5;color:#9a6700;}
+    .card h3{font-size:16px;font-weight:600;margin-bottom:8px;}
+    .card p{font-size:14px;color:var(--fg-soft);}
+    .card-bot{padding:14px 20px;border-top:1px solid var(--line-soft);
+              display:flex;align-items:center;justify-content:space-between;}
+    .card-meta{font-size:12px;color:var(--fg-mute);}
+    .card-btn{font-size:13px;font-weight:500;color:var(--accent);}
+    .card-btn:hover{text-decoration:underline;}
+
+    /* Lesson detail section */
+    .lesson-sec{border:1px solid var(--line-soft);border-radius:13px;margin-bottom:20px;overflow:hidden;}
+    .lesson-hdr{padding:16px 20px;background:var(--bg-alt);border-bottom:1px solid var(--line-soft);
+                display:flex;align-items:center;gap:12px;cursor:pointer;user-select:none;}
+    .lesson-hdr:hover{background:#eef0f4;}
+    .lesson-num{width:28px;height:28px;border-radius:50%;background:var(--fg);color:#fff;
+                font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+    .lesson-title{font-size:15px;font-weight:600;}
+    .lesson-badge{margin-left:auto;font-size:12px;color:var(--fg-mute);}
+    .lesson-chevron{font-size:11px;color:var(--fg-mute);margin-left:8px;transition:transform .2s;}
+    .lesson-body{padding:20px;display:none;}
+    .lesson-body.open{display:block;}
+    .lesson-hdr.open .lesson-chevron{transform:rotate(90deg);}
+
+    /* Content blocks */
+    .tip-box{background:var(--bg-alt);border-left:3px solid var(--accent);
+             border-radius:0 8px 8px 0;padding:14px 16px;margin:14px 0;font-size:14px;}
+    .tip-box b{color:var(--fg);}
+    .tip-box p{color:var(--fg-soft);margin-top:4px;}
+    .phonics-table{width:100%;border-collapse:collapse;font-size:14px;margin:16px 0;}
+    .phonics-table th{background:var(--bg-alt);padding:8px 12px;text-align:left;
+                      font-size:12px;font-weight:600;color:var(--fg-mute);border-bottom:1px solid var(--line);}
+    .phonics-table td{padding:9px 12px;border-bottom:1px solid var(--line-soft);vertical-align:top;}
+    .phonics-table tr:last-child td{border-bottom:none;}
+    .ipa{font-size:15px;font-weight:500;color:var(--accent);font-family:serif;}
+    .ex-words{color:var(--fg-soft);font-size:13px;}
+    .hint{font-size:13px;color:var(--fg-mute);font-style:italic;}
+
+    .template-box{background:#f8f9fd;border:1px solid #d8ddf5;border-radius:8px;
+                  padding:16px;font-size:14px;margin:14px 0;font-family:monospace;line-height:1.8;white-space:pre-wrap;}
+    .template-box .placeholder{color:var(--accent);font-weight:600;}
+    .score-pill{display:inline-block;padding:2px 8px;border-radius:4px;font-size:12px;font-weight:600;margin:2px;}
+    .s36{background:#fff8c5;color:#9a6700;}
+    .s50{background:var(--green-bg);color:var(--green);}
+    .s65{background:#ddf4ff;color:#0969da;}
+
+    .word-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px;margin:12px 0;}
+    .word-chip{background:var(--bg-alt);border:1px solid var(--line-soft);border-radius:6px;
+               padding:6px 10px;font-size:13px;display:flex;justify-content:space-between;align-items:center;}
+    .word-chip .cnt{font-size:11px;color:var(--fg-mute);}
+
+    ul.checklist{list-style:none;padding:0;}
+    ul.checklist li{padding:5px 0;font-size:14px;color:var(--fg-soft);}
+    ul.checklist li::before{content:"✓ ";color:var(--green);font-weight:700;}
+
+    /* Hidden sections */
+    .path-section{display:none;}
+    .path-section.active{display:block;}
+
+    @media(max-width:640px){
+      .cards{grid-template-columns:1fr;}
+      .hero{padding:40px 0 32px;}
+    }
+  </style>
+</head>
+<body>
+
+<nav class="nav">
+  <a class="brand" href="index.html">大骐英语</a>
+  <span class="nav-sep">›</span>
+  <span style="color:var(--fg-soft);font-size:14px;">课程体系</span>
+</nav>
+
+<section class="hero">
+  <div class="container">
+    <p class="eyebrow">零基础到雅思/PTE 完整路线</p>
+    <h1>你需要的所有方法，<br>都在这里。</h1>
+    <p class="hero-sub">从 26 个字母到 PTE 考场，每一个题型都有模板、有讲解、有练习。不靠天赋，靠方法。</p>
+  </div>
+</section>
+
+<div class="container" style="padding-top:32px;padding-bottom:80px;">
+
+  <div class="path-tabs">
+    <button class="path-tab active" onclick="showPath('zero')">🔤 零基础发音</button>
+    <button class="path-tab" onclick="showPath('speaking')">🎙️ PTE 口语</button>
+    <button class="path-tab" onclick="showPath('listening')">👂 PTE 听力</button>
+    <button class="path-tab" onclick="showPath('writing')">✍️ PTE 写作</button>
+    <button class="path-tab" onclick="showPath('strategy')">🎯 考试策略</button>
+  </div>
+
+  <!-- ═══ PATH: 零基础发音 ═══ -->
+  <div class="path-section active" id="path-zero">
+    <div class="sec-hdr">
+      <span class="sec-title">零基础自然拼读</span>
+      <span class="sec-sub">共 5 课 · 建议 2 周内完成</span>
+    </div>
+
+    <div class="lesson-sec">
+      <div class="lesson-hdr" onclick="toggleLesson(this)">
+        <div class="lesson-num">1</div>
+        <div class="lesson-title">Lesson 1 – 入门：认识 48 个音标</div>
+        <span class="lesson-badge">基础</span>
+        <span class="lesson-chevron">▶</span>
+      </div>
+      <div class="lesson-body">
+        <div class="tip-box">
+          <b>本课目标</b>
+          <p>能听出并认出 48 个音标的"长相"，知道元音和辅音的区别。不要求全部会读，先会认。</p>
+        </div>
+        <p style="font-size:14px;color:var(--fg-soft);margin-bottom:16px;">
+          <b>元音</b>：发声不受阻碍，能听到持续的声音（如 /æ/ /iː/ /ʌ/）<br>
+          <b>辅音</b>：发音受到阻碍，分清辅音（声带不振动）和浊辅音（声带振动）
+        </p>
+        <table class="phonics-table">
+          <tr><th>字母</th><th>音标</th><th>记忆口诀</th><th>例词</th></tr>
+          <tr><td>Aa 闭音节</td><td><span class="ipa">/æ/</span></td><td>嘴巴张大，像说"唉"，三根手指开口</td><td><span class="ex-words">cat, hat, map</span></td></tr>
+          <tr><td>Aa 开音节</td><td><span class="ipa">/eɪ/</span></td><td>英文字母 A 的音</td><td><span class="ex-words">cake, name, fake</span></td></tr>
+          <tr><td>Ee 闭音节</td><td><span class="ipa">/e/</span></td><td>绵羊叫，一个手指开口</td><td><span class="ex-words">bed, red, pen</span></td></tr>
+          <tr><td>Ii 闭音节</td><td><span class="ipa">/ɪ/</span></td><td>短促的"一"，嘴角向两边</td><td><span class="ex-words">sit, hit, pin</span></td></tr>
+          <tr><td>Oo 闭音节</td><td><span class="ipa">/ɒ/</span></td><td>"奥"，快而轻</td><td><span class="ex-words">hot, box, dog</span></td></tr>
+          <tr><td>Uu 闭音节</td><td><span class="ipa">/ʌ/</span></td><td>很短很弱的"啊"</td><td><span class="ex-words">bus, cup, run</span></td></tr>
+          <tr><td>schwa</td><td><span class="ipa">/ə/</span></td><td>最懒的音，嘴巴放松说"额"</td><td><span class="ex-words">about, the, a</span></td></tr>
+        </table>
+        <div class="tip-box">
+          <b>课后作业</b>
+          <p>下载「网易有道词典」→ 查 5 个陌生单词 → 听发音 → 找出其中的元音字母，发给大骐老师纠音。</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="lesson-sec">
+      <div class="lesson-hdr" onclick="toggleLesson(this)">
+        <div class="lesson-num">2</div>
+        <div class="lesson-title">Lesson 2 – 进阶：中式发音误区 + 重读</div>
+        <span class="lesson-badge">基础</span>
+        <span class="lesson-chevron">▶</span>
+      </div>
+      <div class="lesson-body">
+        <div class="tip-box">
+          <b>最常见中式发音误区</b>
+          <p>把 /æ/ 发成 /aɪ/（如把 "man" 说成 "mine"）；把长音发成短音（如 /iː/ 发成 /ɪ/）</p>
+        </div>
+        <table class="phonics-table">
+          <tr><th>问题</th><th>错误示范</th><th>正确做法</th></tr>
+          <tr><td>/æ/ 发音</td><td>man → "迈恩"</td><td>嘴巴横向大张，下巴向下，"唉—"持续 0.3 秒</td></tr>
+          <tr><td>重读位置</td><td>把重音打在错误音节</td><td>听字典发音，连续听 10-20 遍后再跟读</td></tr>
+          <tr><td>浊化</td><td>把 /b/d/g/v/z/ 说成清音</td><td>手放喉咙感受振动，浊音声带必须振动</td></tr>
+        </table>
+        <div class="tip-box">
+          <b>重读符号 ˈ 的位置</b>
+          <p>例：about /əˈbaʊt/ → 重音在第二音节 "bout"<br>
+          university /ˌjuːnɪˈvɜːsəti/ → 重音在第三音节 "ver"</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="lesson-sec">
+      <div class="lesson-hdr" onclick="toggleLesson(this)">
+        <div class="lesson-num">3</div>
+        <div class="lesson-title">Lesson 3 – 双元音：/eɪ/ /aɪ/ /aʊ/</div>
+        <span class="lesson-badge">进阶</span>
+        <span class="lesson-chevron">▶</span>
+      </div>
+      <div class="lesson-body">
+        <table class="phonics-table">
+          <tr><th>双元音</th><th>记忆</th><th>例词</th></tr>
+          <tr><td><span class="ipa">/eɪ/</span></td><td>先说"唉"再收到"一"（滑动）</td><td><span class="ex-words">day, say, make, name</span></td></tr>
+          <tr><td><span class="ipa">/aɪ/</span></td><td>先说"啊"再收到"一"（像"爱"）</td><td><span class="ex-words">time, like, high, my</span></td></tr>
+          <tr><td><span class="ipa">/aʊ/</span></td><td>先说"啊"再收拢嘴唇到"欧"</td><td><span class="ex-words">now, how, out, down</span></td></tr>
+          <tr><td><span class="ipa">/əʊ/</span></td><td>先说"额"再滑到"欧"</td><td><span class="ex-words">go, no, home, open</span></td></tr>
+        </table>
+        <div class="tip-box">
+          <b>练习方法</b>
+          <p>用「万词王」→ 助读器 → 导入文本 → AI 带读。跟读每个词 5-10 遍，重点感受嘴形的"滑动"过程。</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="lesson-sec">
+      <div class="lesson-hdr" onclick="toggleLesson(this)">
+        <div class="lesson-num">4</div>
+        <div class="lesson-title">Lesson 4 – 辅音精讲：/k/ /t/ /d/ 和重读</div>
+        <span class="lesson-badge">进阶</span>
+        <span class="lesson-chevron">▶</span>
+      </div>
+      <div class="lesson-body">
+        <table class="phonics-table">
+          <tr><th>辅音</th><th>类型</th><th>发音要点</th><th>例词</th></tr>
+          <tr><td><span class="ipa">/k/</span></td><td>清辅音</td><td>舌根抵上颚，爆破释放，声带不振动</td><td><span class="ex-words">cat, king, back</span></td></tr>
+          <tr><td><span class="ipa">/t/</span></td><td>清辅音</td><td>舌尖抵上齿龈，快速释放，很轻很快</td><td><span class="ex-words">top, cat, tent</span></td></tr>
+          <tr><td><span class="ipa">/d/</span></td><td>浊辅音</td><td>同 /t/ 位置，但声带振动</td><td><span class="ex-words">dog, red, and</span></td></tr>
+          <tr><td><span class="ipa">/p/</span></td><td>清辅音</td><td>双唇闭合爆破，送气非常轻</td><td><span class="ex-words">pig, top, apple</span></td></tr>
+          <tr><td><span class="ipa">/b/</span></td><td>浊辅音</td><td>同 /p/ 位置，声带振动</td><td><span class="ex-words">big, boy, cab</span></td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="lesson-sec">
+      <div class="lesson-hdr" onclick="toggleLesson(this)">
+        <div class="lesson-num">5</div>
+        <div class="lesson-title">Lesson 5 – 总复习：错题集 + 建立错误档案</div>
+        <span class="lesson-badge">巩固</span>
+        <span class="lesson-chevron">▶</span>
+      </div>
+      <div class="lesson-body">
+        <ul class="checklist">
+          <li>整理本周所有发音错误，用不同颜色标记（红=完全不会，黄=不稳定）</li>
+          <li>重音位置出错 → 去字典听发音，连续听 10-20 遍，纠正后再发音</li>
+          <li>实在发不准的音 → 先用中文谐音辅助（只在初期用），记整词发音即可</li>
+          <li>每个易错音标写 3 个例词，贴在桌前，每天早上念一遍</li>
+        </ul>
+        <div class="tip-box">
+          <b>完成发音阶段的标志</b>
+          <p>听到一个陌生单词，能判断出重读音节在哪里；拿到音标能准确发出元音部分。达到这个标准，就可以进入 PTE 题型训练。</p>
+        </div>
+      </div>
+    </div>
+  </div><!-- /path-zero -->
+
+  <!-- ═══ PATH: PTE 口语 ═══ -->
+  <div class="path-section" id="path-speaking">
+    <div class="cards">
+
+      <div class="card">
+        <div class="card-top">
+          <span class="card-icon">📖</span>
+          <span class="card-tag tag-speaking">RA · Read Aloud</span>
+          <h3>朗读文章</h3>
+          <p>朗读屏幕文本，考发音、流利度、内容。准备 30-40 秒，答题 30-40 秒。</p>
+        </div>
+        <div class="card-bot">
+          <span class="card-meta">6-7 题 · 得分权重高</span>
+          <a href="#ra-detail" class="card-btn" onclick="openDetail('ra')">查看模板 →</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <span class="card-icon">🔁</span>
+          <span class="card-tag tag-speaking">RS · Repeat Sentence</span>
+          <h3>复述句子</h3>
+          <p>听一句话，流利复述。不需要全对，流利比完整重要。10-12 题。</p>
+        </div>
+        <div class="card-bot">
+          <span class="card-meta">10-12 题 · 难度分层</span>
+          <a href="#rs-detail" class="card-btn" onclick="openDetail('rs')">查看技巧 →</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <span class="card-icon">📊</span>
+          <span class="card-tag tag-speaking">DI · Describe Image</span>
+          <h3>描述图片</h3>
+          <p>描述图表、地图、流程图。25 秒准备，40 秒答题。有模板可直接套用。</p>
+        </div>
+        <div class="card-bot">
+          <span class="card-meta">5-6 题 · 模板覆盖 90%</span>
+          <a href="#di-detail" class="card-btn" onclick="openDetail('di')">查看模板 →</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <span class="card-icon">💬</span>
+          <span class="card-tag tag-speaking">SGD · Group Discussion</span>
+          <h3>总结讨论</h3>
+          <p>听三人对话，总结主题和要点。有无脑模板，零基础也能拿分。</p>
+        </div>
+        <div class="card-bot">
+          <span class="card-meta">有模板 · 低分段友好</span>
+          <a href="#sgd-detail" class="card-btn" onclick="openDetail('sgd')">查看模板 →</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <span class="card-icon">📞</span>
+          <span class="card-tag tag-speaking">RTS · Role Play</span>
+          <h3>情景对话</h3>
+          <p>读题目描述，把题目的 you→I 改写，套模板说出来。口诀：「二变一」</p>
+        </div>
+        <div class="card-bot">
+          <span class="card-meta">改写技巧为核心</span>
+          <a href="#rts-detail" class="card-btn" onclick="openDetail('rts')">查看模板 →</a>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Detail sections -->
+    <div id="detail-rs" style="display:none;">
+      <div class="sec-hdr"><span class="sec-title">RS 复述句子 · 分档策略</span></div>
+      <div class="tip-box">
+        <b>核心原则</b>
+        <p>流利 > 完整。说错了也要流利地说下去，不能停顿。</p>
+      </div>
+      <table class="phonics-table">
+        <tr><th>目标分</th><th>策略</th><th>例子</th></tr>
+        <tr>
+          <td><span class="score-pill s36">36 分</span></td>
+          <td>流利复述 1 个意群（3-4 个词）</td>
+          <td>Your car can park ／ Your car can park（可重复一遍）</td>
+        </tr>
+        <tr>
+          <td><span class="score-pill s50">50 分</span></td>
+          <td>流利复述前半句（两个意群）</td>
+          <td>Your car can park in the building（结束）</td>
+        </tr>
+        <tr>
+          <td><span class="score-pill s65">65 分</span></td>
+          <td>完整流利复述全句</td>
+          <td>Your car can park in the building behind the medical center.</td>
+        </tr>
+      </table>
+      <div class="tip-box">
+        <b>示例原句</b>
+        <p>Your car can park / in the building / behind the medical center.<br>
+        <span class="hint">斜线是意群切分位置，先听清第一个意群再开口</span></p>
+      </div>
+    </div>
+
+    <div id="detail-di" style="display:none;">
+      <div class="sec-hdr"><span class="sec-title">DI 描述图片 · 模板大全</span></div>
+
+      <div class="lesson-sec">
+        <div class="lesson-hdr" onclick="toggleLesson(this)">
+          <div class="lesson-num" style="background:var(--orange)">A</div>
+          <div class="lesson-title">单柱 / 单饼 / 单线图</div>
+          <span class="lesson-chevron">▶</span>
+        </div>
+        <div class="lesson-body">
+          <div class="template-box"><span class="placeholder">The picture gives information about 【标题】.</span>
+
+<span class="placeholder">【最大值】</span> has the largest number, which is about <span class="placeholder">【数字】</span>.
+<span class="placeholder">【最小值】</span> has the smallest number, which is about <span class="placeholder">【数字】</span>.
+<span class="placeholder">【第二大】</span> has the second largest number, which is about <span class="placeholder">【数字】</span>.
+
+In summary, the number of <span class="placeholder">【大的那个】</span> is larger than <span class="placeholder">【其他】</span>.</div>
+          <div class="tip-box"><b>线图结尾</b><p>xx is increasing / decreasing (from 年份 to 年份)</p></div>
+        </div>
+      </div>
+
+      <div class="lesson-sec">
+        <div class="lesson-hdr" onclick="toggleLesson(this)">
+          <div class="lesson-num" style="background:var(--orange)">B</div>
+          <div class="lesson-title">多柱 / 多饼 / 多线图</div>
+          <span class="lesson-chevron">▶</span>
+        </div>
+        <div class="lesson-body">
+          <div class="template-box"><span class="placeholder">The picture gives information about 【标题】.</span>
+
+In terms of <span class="placeholder">【类别 1】</span>,
+<span class="placeholder">【最大】</span> has the largest number, which is about <span class="placeholder">【数字】</span>.
+<span class="placeholder">【最小】</span> has the smallest number, which is about <span class="placeholder">【数字】</span>.
+
+In terms of <span class="placeholder">【类别 2】</span>,
+<span class="placeholder">【最大】</span> has the largest number, which is about <span class="placeholder">【数字】</span>.
+
+In summary, in terms of <span class="placeholder">【类别】</span>, the number of <span class="placeholder">【大的】</span> is larger than <span class="placeholder">【其他】</span>.</div>
+          <div class="tip-box"><b>说不出 in terms of？</b><p>直接用 for 替代：For 【类别1】, … For 【类别2】, …</p></div>
+        </div>
+      </div>
+
+      <div class="lesson-sec">
+        <div class="lesson-hdr" onclick="toggleLesson(this)">
+          <div class="lesson-num" style="background:var(--orange)">C</div>
+          <div class="lesson-title">地图 / 图片 / 流程图</div>
+          <span class="lesson-chevron">▶</span>
+        </div>
+        <div class="lesson-body">
+          <div class="template-box"><span class="placeholder">The picture gives information about 【标题/主题】.</span>
+
+On the left of the picture, we can find <span class="placeholder">【物体】</span>, which is <span class="placeholder">【颜色/数字】</span>.
+Next to it, we can find <span class="placeholder">【物体】</span>.
+In the middle of the picture, we can notice <span class="placeholder">【物体】</span>, which is <span class="placeholder">【颜色/数字】</span>.
+On the right of the picture, we can see <span class="placeholder">【物体】</span>.
+At the bottom of the picture, we can notice <span class="placeholder">【物体】</span>.
+
+In summary, the picture is about <span class="placeholder">【把物品列举一遍】</span>.</div>
+          <div class="tip-box">
+            <b>可互换短语</b>
+            <p>we can find / we can notice / we can see / there is / there are / it shows</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="tip-box">
+        <b>DI 数字读法速查</b>
+        <p>
+          百: one hundred｜千: one thousand｜万: ten thousand｜百万: one million｜十亿: one billion<br>
+          小数: 49.5 → forty-nine point five<br>
+          年份: 1984 → nineteen eighty-four｜2024 → twenty twenty-four<br>
+          百分比: 70% → seventy percent
+        </p>
+      </div>
+    </div>
+
+    <div id="detail-sgd" style="display:none;">
+      <div class="sec-hdr"><span class="sec-title">SGD 总结讨论 · 模板</span></div>
+      <div class="lesson-sec">
+        <div class="lesson-hdr" onclick="toggleLesson(this)">
+          <div class="lesson-num" style="background:var(--purple)">低</div>
+          <div class="lesson-title">零基础无脑模板（36-45 分目标）</div>
+          <span class="lesson-chevron">▶</span>
+        </div>
+        <div class="lesson-body">
+          <div class="template-box">The three speakers talk about university life and xxx
+Firstly, the first speaker talk about how to write essays and xxx
+And then, the speaker mention group discussion and xxx
+The speaker also noted helpful for learning and xxx
+And he also said a future job and xxx
+
+The second speaker agree with the first speaker
+Moving on, the second speaker talk about the pros and cons of online classes and xxx
+And then, the speaker mention using the library and xxx
+The speaker also noted final exams and xxx
+And he also said successful career and xxx
+
+The third speaker agree with the second speaker
+In summary, the discussion is about university life.</div>
+          <div class="tip-box"><b>xxx 是什么？</b><p>xxx 处填你听到的任何一个词，听不清就重复前一个词，保持流利比内容准确更重要。</p></div>
+        </div>
+      </div>
+      <div class="lesson-sec">
+        <div class="lesson-hdr" onclick="toggleLesson(this)">
+          <div class="lesson-num" style="background:var(--purple)">高</div>
+          <div class="lesson-title">标准模板（50 分以上目标）</div>
+          <span class="lesson-chevron">▶</span>
+        </div>
+        <div class="lesson-body">
+          <div class="template-box">The 3 speakers are talking about <span class="placeholder">【主题】</span> in the discussion.
+
+Firstly, the first speaker talk about <span class="placeholder">【词组/短语】</span>,
+And then, the speaker mention <span class="placeholder">【词组】</span>.
+The speaker also noted <span class="placeholder">【词组】</span>.
+
+The second speaker agree with the first speaker
+Moving on, the second speaker talk about <span class="placeholder">【词组】</span>.
+And then, the speaker mention <span class="placeholder">【词组】</span>.
+
+The third speaker agree with the second speaker
+In addition, the third speaker talk about <span class="placeholder">【词组】</span>.
+In summary, the discussion is about <span class="placeholder">【主题重复一遍】</span>.</div>
+        </div>
+      </div>
+    </div>
+
+    <div id="detail-rts" style="display:none;">
+      <div class="sec-hdr"><span class="sec-title">RTS 情景对话 · 口诀「二变一」</span></div>
+      <div class="tip-box">
+        <b>二变一口诀</b>
+        <p>题目里的 <b>you → I</b>，<b>your → my</b>，<b>you are / you're → I am</b><br>
+        改完再套模板读出来。</p>
+      </div>
+      <div class="template-box">Hello. Sorry to bother you.
+I know that <span class="placeholder">【把题目第一句改写】</span>.
+Moving on, <span class="placeholder">【第二句改写】</span>.
+In addition, <span class="placeholder">【第三句改写】</span>.
+I wonder if you can help me.
+Thank you for your help!</div>
+    </div>
+
+    <div id="detail-ra" style="display:none;">
+      <div class="sec-hdr"><span class="sec-title">RA 朗读文章 · 选句策略</span></div>
+      <div class="tip-box">
+        <b>最低标准</b>
+        <p>选一句不少于 8-10 个词的句子，流利读出来就有分。</p>
+      </div>
+      <ul class="checklist">
+        <li>元音要饱满：/æ/ 不能发成 /aɪ/，长音不能缩短</li>
+        <li>句子不能以虚词结尾（at, and, the, of, a, an 等）</li>
+        <li>准备时间 30 秒内把文中最难的词先读一遍</li>
+        <li>答题时遇到不会的词不停顿，跳过继续读</li>
+      </ul>
+    </div>
+
+  </div><!-- /path-speaking -->
+
+  <!-- ═══ PATH: 听力 ═══ -->
+  <div class="path-section" id="path-listening">
+    <div class="sec-hdr">
+      <span class="sec-title">PTE 听力题型</span>
+      <span class="sec-sub">WFD 是重中之重</span>
+    </div>
+    <div class="cards">
+      <div class="card">
+        <div class="card-top">
+          <span class="card-icon">✍️</span>
+          <span class="card-tag tag-listening">WFD · Write from Dictation</span>
+          <h3>听写句子</h3>
+          <p>听一句话，原文写出来。高频 178 题已整理，音频全部配套。</p>
+        </div>
+        <div class="card-bot">
+          <span class="card-meta">178 题 · 配套音频</span>
+          <a href="wfd.html" class="card-btn">开始练习 →</a>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-top">
+          <span class="card-icon">📝</span>
+          <span class="card-tag tag-listening">SST · Summarize Spoken Text</span>
+          <h3>总结口语文本</h3>
+          <p>听一段话，写 50-70 词的总结。用套词模板拿基础分，主题词优先。</p>
+        </div>
+        <div class="card-bot">
+          <span class="card-meta">套词模板为核心</span>
+          <a href="#" class="card-btn" onclick="showPath('writing')">查看写作模板 →</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec-hdr" style="margin-top:8px;"><span class="sec-title">WFD 试词技巧</span></div>
+    <div class="tip-box">
+      <b>试词不限次数，不看语法，不看大小写</b>
+      <p>单词复数不确定 → 两个都写（students / student）<br>
+      冠词不确定 → a / an 都写<br>
+      动词时态不确定 → studied / study 都写</p>
+    </div>
+    <div class="lesson-sec">
+      <div class="lesson-hdr" onclick="toggleLesson(this)">
+        <div class="lesson-num">★</div>
+        <div class="lesson-title">WFD 超高频词统计（背这些，分数立刻涨）</div>
+        <span class="lesson-chevron">▶</span>
+      </div>
+      <div class="lesson-body">
+        <div class="word-grid">
+          <div class="word-chip">the / The <span class="cnt">200 次</span></div>
+          <div class="word-chip">of <span class="cnt">175 次</span></div>
+          <div class="word-chip">is <span class="cnt">84 次</span></div>
+          <div class="word-chip">to <span class="cnt">107 次</span></div>
+          <div class="word-chip">a <span class="cnt">57 次</span></div>
+          <div class="word-chip">are <span class="cnt">43 次</span></div>
+          <div class="word-chip">be <span class="cnt">46 次</span></div>
+          <div class="word-chip">and <span class="cnt">41 次</span></div>
+          <div class="word-chip">for <span class="cnt">35 次</span></div>
+          <div class="word-chip">university <span class="cnt">16 次</span></div>
+          <div class="word-chip">students <span class="cnt">9 次</span></div>
+          <div class="word-chip">library <span class="cnt">9 次</span></div>
+          <div class="word-chip">course <span class="cnt">14 次</span></div>
+          <div class="word-chip">research <span class="cnt">19 次</span></div>
+          <div class="word-chip">study <span class="cnt">13 次</span></div>
+          <div class="word-chip">has <span class="cnt">23 次</span></div>
+        </div>
+        <div class="tip-box">
+          <b>WFD 试词顺口溜（背了就能猜出来）</b>
+          <p>
+            Welcome to your new academic life.<br>
+            Many students study at this university.<br>
+            Both staff and students use the library.<br>
+            During that week, you should not go out.<br>
+            The library has good books for research.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div><!-- /path-listening -->
+
+  <!-- ═══ PATH: 写作 ═══ -->
+  <div class="path-section" id="path-writing">
+    <div class="cards">
+      <div class="card">
+        <div class="card-top">
+          <span class="card-icon">📄</span>
+          <span class="card-tag tag-writing">SWT · Summarize Written Text</span>
+          <h3>小作文</h3>
+          <p>10 分钟，5-75 词，答题框只能有一句话。用 While 模板将 3-4 个关键词连成一句。</p>
+        </div>
+        <div class="card-bot">
+          <span class="card-meta">1 句话 · While 模板</span>
+          <a href="#" class="card-btn" onclick="openDetail('swt')">查看模板 →</a>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-top">
+          <span class="card-icon">📝</span>
+          <span class="card-tag tag-writing">WE · Write Essay</span>
+          <h3>大作文</h3>
+          <p>选择观点，用固定模板写 200-300 词。主题词 + 话题词套进模板即可。</p>
+        </div>
+        <div class="card-bot">
+          <span class="card-meta">36 分不学大作文</span>
+          <a href="#" class="card-btn" onclick="openDetail('we')">查看模板 →</a>
+        </div>
+      </div>
+    </div>
+
+    <div id="detail-swt" style="display:none;">
+      <div class="sec-hdr"><span class="sec-title">SWT 小作文 · While 模板</span></div>
+      <div class="tip-box">
+        <b>规则</b>
+        <p>答题框里只能有一句话（一个句号）。首字母大写，标点紧跟前一个词后空格。</p>
+      </div>
+      <div class="template-box">While <span class="placeholder">【第一句关键信息】</span>, <span class="placeholder">【第二句关键信息】</span>.
+
+While <span class="placeholder">【第一句】</span>, <span class="placeholder">【第二句】</span>, so/but <span class="placeholder">【第三句】</span>.
+
+<span class="placeholder">【第一句】</span>, and <span class="placeholder">【第二句】</span>, so/but <span class="placeholder">【第三句】</span>, which means that <span class="placeholder">【第四句】</span>.</div>
+      <div class="tip-box">
+        <b>不需要抄的内容</b>
+        <p>① 列举的数字 ② for example / such as 后的例子 ③ 问句（?）④ 引用（""）⑤ 破折号后内容</p>
+      </div>
+    </div>
+
+    <div id="detail-we" style="display:none;">
+      <div class="sec-hdr"><span class="sec-title">WE 大作文 · 通用模板</span></div>
+      <div class="template-box">There is no doubt that the topic of <span class="placeholder">【主题词】</span> has become one of the most discussed issues today. Many people have different views on this. From my point of view, I strongly believe that <span class="placeholder">【观点句】</span>. And the following paragraphs will explain my reasons.
+
+First of all, one main reason is that <span class="placeholder">【主题词】</span> can result in <span class="placeholder">【话题词】</span>. In other words, <span class="placeholder">【主题词】</span> is a good way to bring <span class="placeholder">【话题词】</span> to people. For example, according to a recent report from Yale University, more than 70% of <span class="placeholder">【相关人群】</span> have enjoyed <span class="placeholder">【话题词】</span> because of <span class="placeholder">【主题词】</span>.
+
+Furthermore, another reason is that <span class="placeholder">【主题词】</span> can lead to <span class="placeholder">【话题词 2】</span>. This means that <span class="placeholder">【进一步说明】</span>.
+
+In conclusion, I strongly believe that <span class="placeholder">【重复观点句】</span>.</div>
+    </div>
+  </div><!-- /path-writing -->
+
+  <!-- ═══ PATH: 策略 ═══ -->
+  <div class="path-section" id="path-strategy">
+    <div class="sec-hdr"><span class="sec-title">考场策略 · 通用原则</span></div>
+    <div class="cards">
+      <div class="card">
+        <div class="card-top">
+          <span class="card-icon">⏱️</span>
+          <span class="card-tag tag-strategy">时间管理</span>
+          <h3>每题都要回答</h3>
+          <p>PTE 不会倒扣分，空着必然 0 分。哪怕说错，流利说完也能拿部分分。</p>
+        </div>
+        <div class="card-bot"><span class="card-meta">不能跳过任何题</span></div>
+      </div>
+      <div class="card">
+        <div class="card-top">
+          <span class="card-icon">🎯</span>
+          <span class="card-tag tag-strategy">分段目标</span>
+          <h3>按目标分数选策略</h3>
+          <p>36 分：RS 说 1 意群，WFD 抓高频词，DI 套模板。50 分：加内容量。65+：完整输出。</p>
+        </div>
+        <div class="card-bot"><span class="card-meta">策略优先于刷题量</span></div>
+      </div>
+      <div class="card">
+        <div class="card-top">
+          <span class="card-icon">🔊</span>
+          <span class="card-tag tag-strategy">口语准备</span>
+          <h3>DI 预读时张嘴</h3>
+          <p>考试 25 秒准备时间，一定要出声读题目单词，把最大值最小值的单词读熟。</p>
+        </div>
+        <div class="card-bot"><span class="card-meta">DI 最关键习惯</span></div>
+      </div>
+    </div>
+
+    <div class="lesson-sec">
+      <div class="lesson-hdr" onclick="toggleLesson(this)">
+        <div class="lesson-num">★</div>
+        <div class="lesson-title">RL / SST 套词模板（听力写作通用）</div>
+        <span class="lesson-chevron">▶</span>
+      </div>
+      <div class="lesson-body">
+        <div class="template-box">The lecture gives information about <span class="placeholder">【主题】</span>.
+Firstly, the speaker talked about <span class="placeholder">【A and B】</span>.
+Moving on, the speaker mentioned <span class="placeholder">【A and B】</span>.
+In addition, the speaker also noted <span class="placeholder">【A and B】</span>.
+Moving on, and he also said <span class="placeholder">【A and B】</span>.
+In summary, the lecture gives information about <span class="placeholder">【主题重复】</span>.</div>
+        <div class="tip-box">
+          <b>SST 套词要领</b>
+          <p>50 分目标：主题词尽量听出来，剩下写名词为主，不需要写完整句子。</p>
+        </div>
+      </div>
+    </div>
+  </div><!-- /path-strategy -->
+
+</div><!-- /container -->
+
+<script>
+function showPath(id) {
+  document.querySelectorAll('.path-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.path-tab').forEach(b => b.classList.remove('active'));
+  document.getElementById('path-' + id).classList.add('active');
+  const tabs = ['zero','speaking','listening','writing','strategy'];
+  const idx = tabs.indexOf(id);
+  document.querySelectorAll('.path-tab')[idx].classList.add('active');
+  window.scrollTo({top: 0, behavior:'smooth'});
+}
+
+function toggleLesson(hdr) {
+  const body = hdr.nextElementSibling;
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  hdr.classList.toggle('open', !isOpen);
+}
+
+function openDetail(id) {
+  // Hide all details, show target
+  document.querySelectorAll('[id^="detail-"]').forEach(el => el.style.display = 'none');
+  const el = document.getElementById('detail-' + id);
+  if (el) { el.style.display = 'block'; el.scrollIntoView({behavior:'smooth', block:'start'}); }
+}
+</script>
+</body>
+</html>

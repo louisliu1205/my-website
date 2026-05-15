@@ -115,6 +115,30 @@
     ul.checklist li{padding:5px 0;font-size:14px;color:var(--fg-soft);}
     ul.checklist li::before{content:"✓ ";color:var(--green);font-weight:700;}
 
+    /* Phonics letter grid */
+    .letter-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:10px;margin:16px 0;}
+    .letter-card{border:1px solid var(--line-soft);border-radius:10px;padding:14px 10px;
+      text-align:center;background:var(--bg);transition:border-color .15s;}
+    .letter-card:hover{border-color:var(--accent);}
+    .letter-card .ltr{font-size:26px;font-weight:700;color:var(--fg);line-height:1.2;}
+    .letter-card .lipa{font-size:13px;color:var(--accent);font-family:serif;margin:4px 0 2px;}
+    .letter-card .lex{font-size:12px;color:var(--fg-mute);margin-bottom:8px;}
+    .play-btn{display:inline-flex;align-items:center;justify-content:center;
+      width:28px;height:28px;border-radius:50%;border:1px solid var(--line);
+      background:var(--bg-alt);cursor:pointer;font-size:13px;color:var(--accent);
+      transition:all .15s;user-select:none;}
+    .play-btn:hover{background:var(--accent);color:#fff;border-color:var(--accent);}
+
+    /* Video embeds */
+    .video-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0;}
+    .video-box{border-radius:10px;overflow:hidden;}
+    .video-box iframe{width:100%;height:195px;display:block;border:0;}
+    .video-label{font-size:12px;color:var(--fg-mute);margin-top:6px;text-align:center;}
+    @media(max-width:640px){
+      .video-row{grid-template-columns:1fr;}
+      .letter-grid{grid-template-columns:repeat(auto-fill,minmax(90px,1fr));}
+    }
+
     /* Hidden sections */
     .path-section{display:none;}
     .path-section.active{display:block;}
@@ -161,126 +185,165 @@
   <div class="path-section active" id="path-zero">
     <div class="sec-hdr">
       <span class="sec-title">零基础自然拼读</span>
-      <span class="sec-sub">共 5 课 · 建议 2 周内完成</span>
+      <span class="sec-sub">共 4 课 · 先学字母本音，再学拼读规律</span>
     </div>
 
+    <!-- Lesson 1: 26 letters phonics -->
     <div class="lesson-sec">
       <div class="lesson-hdr" onclick="toggleLesson(this)">
         <div class="lesson-num">1</div>
-        <div class="lesson-title">Lesson 1 – 入门：认识 48 个音标</div>
-        <span class="lesson-badge">基础</span>
+        <div class="lesson-title">Lesson 1 — 26 个字母 + 自然拼读表</div>
+        <span class="lesson-badge">第一步</span>
         <span class="lesson-chevron">▶</span>
       </div>
       <div class="lesson-body">
         <div class="tip-box">
-          <b>本课目标</b>
-          <p>能听出并认出 48 个音标的"长相"，知道元音和辅音的区别。不要求全部会读，先会认。</p>
+          <b>什么是字母本音？</b>
+          <p>每个字母在单词里最常发的那个音，叫"本音"。先把 26 个字母的本音记住，就能拼读大部分简单单词。点 🔊 听示例词的发音。</p>
         </div>
-        <p style="font-size:14px;color:var(--fg-soft);margin-bottom:16px;">
-          <b>元音</b>：发声不受阻碍，能听到持续的声音（如 /æ/ /iː/ /ʌ/）<br>
-          <b>辅音</b>：发音受到阻碍，分清辅音（声带不振动）和浊辅音（声带振动）
-        </p>
-        <table class="phonics-table">
-          <tr><th>字母</th><th>音标</th><th>记忆口诀</th><th>例词</th></tr>
-          <tr><td>Aa 闭音节</td><td><span class="ipa">/æ/</span></td><td>嘴巴张大，像说"唉"，三根手指开口</td><td><span class="ex-words">cat, hat, map</span></td></tr>
-          <tr><td>Aa 开音节</td><td><span class="ipa">/eɪ/</span></td><td>英文字母 A 的音</td><td><span class="ex-words">cake, name, fake</span></td></tr>
-          <tr><td>Ee 闭音节</td><td><span class="ipa">/e/</span></td><td>绵羊叫，一个手指开口</td><td><span class="ex-words">bed, red, pen</span></td></tr>
-          <tr><td>Ii 闭音节</td><td><span class="ipa">/ɪ/</span></td><td>短促的"一"，嘴角向两边</td><td><span class="ex-words">sit, hit, pin</span></td></tr>
-          <tr><td>Oo 闭音节</td><td><span class="ipa">/ɒ/</span></td><td>"奥"，快而轻</td><td><span class="ex-words">hot, box, dog</span></td></tr>
-          <tr><td>Uu 闭音节</td><td><span class="ipa">/ʌ/</span></td><td>很短很弱的"啊"</td><td><span class="ex-words">bus, cup, run</span></td></tr>
-          <tr><td>schwa</td><td><span class="ipa">/ə/</span></td><td>最懒的音，嘴巴放松说"额"</td><td><span class="ex-words">about, the, a</span></td></tr>
-        </table>
+
+        <p style="font-size:13px;color:var(--fg-mute);margin-bottom:12px;">🔊 点击按钮听示例词发音（需浏览器支持语音）</p>
+
+        <div class="letter-grid">
+          <div class="letter-card"><div class="ltr">Aa</div><div class="lipa">/æ/</div><div class="lex">apple</div><button class="play-btn" onclick="playWord('apple')">🔊</button></div>
+          <div class="letter-card"><div class="ltr">Bb</div><div class="lipa">/b/</div><div class="lex">boy</div><button class="play-btn" onclick="playWord('boy')">🔊</button></div>
+          <div class="letter-card"><div class="ltr">Cc</div><div class="lipa">/k/</div><div class="lex">cat</div><button class="play-btn" onclick="playWord('cat')">🔊</button></div>
+          <div class="letter-card"><div class="ltr">Dd</div><div class="lipa">/d/</div><div class="lex">dog</div><button class="play-btn" onclick="playWord('dog')">🔊</button></div>
+          <div class="letter-card"><div class="ltr">Ee</div><div class="lipa">/e/</div><div class="lex">egg</div><button class="play-btn" onclick="playWord('egg')">🔊</button></div>
+          <div class="letter-card"><div class="ltr">Ff</div><div class="lipa">/f/</div><div class="lex">fish</div><button class="play-btn" onclick="playWord('fish')">🔊</button></div>
+          <div class="letter-card"><div class="ltr">Gg</div><div class="lipa">/ɡ/</div><div class="lex">go</div><button class="play-btn" onclick="playWord('go')">🔊</button></div>
+          <div class="letter-card"><div class="ltr">Hh</div><div class="lipa">/h/</div><div class="lex">hat</div><button class="play-btn" onclick="playWord('hat')">🔊</button></div>
+          <div class="letter-card"><div class="ltr">Ii</div><div class="lipa">/ɪ/</div><div class="lex">it</div><button class="play-btn" onclick="playWord('it')">🔊</button></div>
+          <div class="letter-card"><div class="ltr">Jj</div><div class="lipa">/dʒ/</div><div class="lex">jump</div><button class="play-btn" onclick="playWord('jump')">🔊</button></div>
+          <div class="letter-card"><div class="ltr">Kk</div><div class="lipa">/k/</div><div class="lex">king</div><button class="play-btn" onclick="playWord('king')">🔊</button></div>
+          <div class="letter-card"><div class="ltr">Ll</div><div class="lipa">/l/</div><div class="lex">lion</div><button class="play-btn" onclick="playWord('lion')">🔊</button></div>
+          <div class="letter-card"><div class="ltr">Mm</div><div class="lipa">/m/</div><div class="lex">map</div><button class="play-btn" onclick="playWord('map')">🔊</button></div>
+          <div class="letter-card"><div class="ltr">Nn</div><div class="lipa">/n/</div><div class="lex">no</div><button class="play-btn" onclick="playWord('no')">🔊</button></div>
+          <div class="letter-card"><div class="ltr">Oo</div><div class="lipa">/ɒ/</div><div class="lex">on</div><button class="play-btn" onclick="playWord('on')">🔊</button></div>
+          <div class="letter-card"><div class="ltr">Pp</div><div class="lipa">/p/</div><div class="lex">pig</div><button class="play-btn" onclick="playWord('pig')">🔊</button></div>
+          <div class="letter-card"><div class="ltr">Qq</div><div class="lipa">/kw/</div><div class="lex">queen</div><button class="play-btn" onclick="playWord('queen')">🔊</button></div>
+          <div class="letter-card"><div class="ltr">Rr</div><div class="lipa">/r/</div><div class="lex">red</div><button class="play-btn" onclick="playWord('red')">🔊</button></div>
+          <div class="letter-card"><div class="ltr">Ss</div><div class="lipa">/s/</div><div class="lex">sun</div><button class="play-btn" onclick="playWord('sun')">🔊</button></div>
+          <div class="letter-card"><div class="ltr">Tt</div><div class="lipa">/t/</div><div class="lex">top</div><button class="play-btn" onclick="playWord('top')">🔊</button></div>
+          <div class="letter-card"><div class="ltr">Uu</div><div class="lipa">/ʌ/</div><div class="lex">up</div><button class="play-btn" onclick="playWord('up')">🔊</button></div>
+          <div class="letter-card"><div class="ltr">Vv</div><div class="lipa">/v/</div><div class="lex">van</div><button class="play-btn" onclick="playWord('van')">🔊</button></div>
+          <div class="letter-card"><div class="ltr">Ww</div><div class="lipa">/w/</div><div class="lex">wet</div><button class="play-btn" onclick="playWord('wet')">🔊</button></div>
+          <div class="letter-card"><div class="ltr">Xx</div><div class="lipa">/ks/</div><div class="lex">fox</div><button class="play-btn" onclick="playWord('fox')">🔊</button></div>
+          <div class="letter-card"><div class="ltr">Yy</div><div class="lipa">/j/</div><div class="lex">yes</div><button class="play-btn" onclick="playWord('yes')">🔊</button></div>
+          <div class="letter-card"><div class="ltr">Zz</div><div class="lipa">/z/</div><div class="lex">zip</div><button class="play-btn" onclick="playWord('zip')">🔊</button></div>
+        </div>
+
+        <div class="tip-box" style="margin-top:20px;">
+          <b>嘴型视频讲解</b>
+          <p>看视频，对照嘴型练习。重点看元音 A E I O U 的嘴型开合幅度。</p>
+        </div>
+        <div class="video-row">
+          <div>
+            <div class="video-box">
+              <iframe src="//player.bilibili.com/player.html?bvid=BV1hj411v7L7&page=1&autoplay=0" scrolling="no" frameborder="no" allowfullscreen="true"></iframe>
+            </div>
+            <div class="video-label">发音入门 · 嘴型示范</div>
+          </div>
+          <div>
+            <div class="video-box">
+              <iframe src="//player.bilibili.com/player.html?bvid=BV127411n7nj&page=1&autoplay=0" scrolling="no" frameborder="no" allowfullscreen="true"></iframe>
+            </div>
+            <div class="video-label">自然拼读 · 跟读练习</div>
+          </div>
+        </div>
+
         <div class="tip-box">
           <b>课后作业</b>
-          <p>下载「网易有道词典」→ 查 5 个陌生单词 → 听发音 → 找出其中的元音字母，发给大骐老师纠音。</p>
+          <p>下载「网易有道词典」→ 查 5 个简单单词（如 cat / dog / map）→ 听发音 → 对照字母本音表，找出每个字母发的是哪个音。</p>
         </div>
       </div>
     </div>
 
+    <!-- Lesson 2: vowel rules -->
     <div class="lesson-sec">
       <div class="lesson-hdr" onclick="toggleLesson(this)">
         <div class="lesson-num">2</div>
-        <div class="lesson-title">Lesson 2 – 进阶：中式发音误区 + 重读</div>
-        <span class="lesson-badge">基础</span>
+        <div class="lesson-title">Lesson 2 — 元音规律：开音节 vs 闭音节</div>
+        <span class="lesson-badge">第二步</span>
         <span class="lesson-chevron">▶</span>
       </div>
       <div class="lesson-body">
         <div class="tip-box">
-          <b>最常见中式发音误区</b>
-          <p>把 /æ/ 发成 /aɪ/（如把 "man" 说成 "mine"）；把长音发成短音（如 /iː/ 发成 /ɪ/）</p>
+          <b>为什么同一个字母发音不一样？</b>
+          <p>元音字母 A E I O U 在不同音节环境下会变音。先掌握两种最基础的规律。</p>
         </div>
         <table class="phonics-table">
-          <tr><th>问题</th><th>错误示范</th><th>正确做法</th></tr>
-          <tr><td>/æ/ 发音</td><td>man → "迈恩"</td><td>嘴巴横向大张，下巴向下，"唉—"持续 0.3 秒</td></tr>
-          <tr><td>重读位置</td><td>把重音打在错误音节</td><td>听字典发音，连续听 10-20 遍后再跟读</td></tr>
-          <tr><td>浊化</td><td>把 /b/d/g/v/z/ 说成清音</td><td>手放喉咙感受振动，浊音声带必须振动</td></tr>
+          <tr><th>类型</th><th>规则</th><th>元音发音</th><th>例词</th></tr>
+          <tr><td><b>闭音节</b></td><td>以辅音结尾，元音被"关住"</td><td>发短促的本音</td><td><span class="ex-words">cat /æ/  bed /e/  sit /ɪ/  hot /ɒ/  bus /ʌ/</span></td></tr>
+          <tr><td><b>开音节</b></td><td>以元音结尾或 e 结尾（不发音）</td><td>发字母名称音</td><td><span class="ex-words">cake /eɪ/  he /iː/  time /aɪ/  go /əʊ/  use /juː/</span></td></tr>
         </table>
         <div class="tip-box">
-          <b>重读符号 ˈ 的位置</b>
-          <p>例：about /əˈbaʊt/ → 重音在第二音节 "bout"<br>
-          university /ˌjuːnɪˈvɜːsəti/ → 重音在第三音节 "ver"</p>
+          <b>中式发音误区</b>
+          <p>最常犯：把 /æ/ 发成 /aɪ/，如把 "man" 说成 "mine"。<br>
+          纠正方法：嘴巴横向大张，下巴向下，持续发"唉—"约 0.3 秒。</p>
+        </div>
+        <div class="tip-box">
+          <b>重读符号</b>
+          <p>音标里 ˈ 标在哪个音节前，就重读哪个音节。<br>
+          about /əˈbaʊt/ → 重音在 "bout"　　university /ˌjuːnɪˈvɜːsəti/ → 重音在 "ver"</p>
         </div>
       </div>
     </div>
 
+    <!-- Lesson 3: diphthongs -->
     <div class="lesson-sec">
       <div class="lesson-hdr" onclick="toggleLesson(this)">
         <div class="lesson-num">3</div>
-        <div class="lesson-title">Lesson 3 – 双元音：/eɪ/ /aɪ/ /aʊ/</div>
+        <div class="lesson-title">Lesson 3 — 双元音 + 辅音清浊对</div>
         <span class="lesson-badge">进阶</span>
         <span class="lesson-chevron">▶</span>
       </div>
       <div class="lesson-body">
-        <table class="phonics-table">
-          <tr><th>双元音</th><th>记忆</th><th>例词</th></tr>
-          <tr><td><span class="ipa">/eɪ/</span></td><td>先说"唉"再收到"一"（滑动）</td><td><span class="ex-words">day, say, make, name</span></td></tr>
-          <tr><td><span class="ipa">/aɪ/</span></td><td>先说"啊"再收到"一"（像"爱"）</td><td><span class="ex-words">time, like, high, my</span></td></tr>
-          <tr><td><span class="ipa">/aʊ/</span></td><td>先说"啊"再收拢嘴唇到"欧"</td><td><span class="ex-words">now, how, out, down</span></td></tr>
-          <tr><td><span class="ipa">/əʊ/</span></td><td>先说"额"再滑到"欧"</td><td><span class="ex-words">go, no, home, open</span></td></tr>
-        </table>
         <div class="tip-box">
-          <b>练习方法</b>
-          <p>用「万词王」→ 助读器 → 导入文本 → AI 带读。跟读每个词 5-10 遍，重点感受嘴形的"滑动"过程。</p>
+          <b>双元音：嘴形"滑动"，不是两个音拼起来</b>
+          <p>发双元音时，嘴形从一个位置滑动到另一个位置，中间不停顿。</p>
         </div>
+        <table class="phonics-table">
+          <tr><th>双元音</th><th>嘴形变化</th><th>例词</th><th>听</th></tr>
+          <tr><td><span class="ipa">/eɪ/</span></td><td>"唉" → 收到 "一"</td><td><span class="ex-words">day, make, name</span></td><td><button class="play-btn" onclick="playWord('day')">🔊</button></td></tr>
+          <tr><td><span class="ipa">/aɪ/</span></td><td>"啊" → 收到 "一"</td><td><span class="ex-words">time, like, my</span></td><td><button class="play-btn" onclick="playWord('time')">🔊</button></td></tr>
+          <tr><td><span class="ipa">/aʊ/</span></td><td>"啊" → 收拢嘴唇到 "欧"</td><td><span class="ex-words">now, out, down</span></td><td><button class="play-btn" onclick="playWord('now')">🔊</button></td></tr>
+          <tr><td><span class="ipa">/əʊ/</span></td><td>"额" → 滑到 "欧"</td><td><span class="ex-words">go, home, open</span></td><td><button class="play-btn" onclick="playWord('go')">🔊</button></td></tr>
+          <tr><td><span class="ipa">/ɔɪ/</span></td><td>"奥" → 收到 "一"</td><td><span class="ex-words">boy, oil, coin</span></td><td><button class="play-btn" onclick="playWord('boy')">🔊</button></td></tr>
+        </table>
+
+        <div class="tip-box" style="margin-top:16px;">
+          <b>辅音清浊对（手放喉咙感受振动）</b>
+        </div>
+        <table class="phonics-table">
+          <tr><th>清音（声带不振动）</th><th>浊音（声带振动）</th><th>发音要点</th></tr>
+          <tr><td><span class="ipa">/p/</span> pig <button class="play-btn" onclick="playWord('pig')">🔊</button></td><td><span class="ipa">/b/</span> boy <button class="play-btn" onclick="playWord('boy')">🔊</button></td><td>双唇闭合爆破，浊音加振动</td></tr>
+          <tr><td><span class="ipa">/t/</span> top <button class="play-btn" onclick="playWord('top')">🔊</button></td><td><span class="ipa">/d/</span> dog <button class="play-btn" onclick="playWord('dog')">🔊</button></td><td>舌尖抵上齿龈，快速释放</td></tr>
+          <tr><td><span class="ipa">/k/</span> cat <button class="play-btn" onclick="playWord('cat')">🔊</button></td><td><span class="ipa">/ɡ/</span> go <button class="play-btn" onclick="playWord('go')">🔊</button></td><td>舌根抵上颚爆破</td></tr>
+          <tr><td><span class="ipa">/f/</span> fish <button class="play-btn" onclick="playWord('fish')">🔊</button></td><td><span class="ipa">/v/</span> van <button class="play-btn" onclick="playWord('van')">🔊</button></td><td>上齿轻咬下唇，持续摩擦</td></tr>
+          <tr><td><span class="ipa">/s/</span> sun <button class="play-btn" onclick="playWord('sun')">🔊</button></td><td><span class="ipa">/z/</span> zip <button class="play-btn" onclick="playWord('zip')">🔊</button></td><td>气流从舌尖两侧流出</td></tr>
+        </table>
       </div>
     </div>
 
+    <!-- Lesson 4: review -->
     <div class="lesson-sec">
       <div class="lesson-hdr" onclick="toggleLesson(this)">
         <div class="lesson-num">4</div>
-        <div class="lesson-title">Lesson 4 – 辅音精讲：/k/ /t/ /d/ 和重读</div>
-        <span class="lesson-badge">进阶</span>
-        <span class="lesson-chevron">▶</span>
-      </div>
-      <div class="lesson-body">
-        <table class="phonics-table">
-          <tr><th>辅音</th><th>类型</th><th>发音要点</th><th>例词</th></tr>
-          <tr><td><span class="ipa">/k/</span></td><td>清辅音</td><td>舌根抵上颚，爆破释放，声带不振动</td><td><span class="ex-words">cat, king, back</span></td></tr>
-          <tr><td><span class="ipa">/t/</span></td><td>清辅音</td><td>舌尖抵上齿龈，快速释放，很轻很快</td><td><span class="ex-words">top, cat, tent</span></td></tr>
-          <tr><td><span class="ipa">/d/</span></td><td>浊辅音</td><td>同 /t/ 位置，但声带振动</td><td><span class="ex-words">dog, red, and</span></td></tr>
-          <tr><td><span class="ipa">/p/</span></td><td>清辅音</td><td>双唇闭合爆破，送气非常轻</td><td><span class="ex-words">pig, top, apple</span></td></tr>
-          <tr><td><span class="ipa">/b/</span></td><td>浊辅音</td><td>同 /p/ 位置，声带振动</td><td><span class="ex-words">big, boy, cab</span></td></tr>
-        </table>
-      </div>
-    </div>
-
-    <div class="lesson-sec">
-      <div class="lesson-hdr" onclick="toggleLesson(this)">
-        <div class="lesson-num">5</div>
-        <div class="lesson-title">Lesson 5 – 总复习：错题集 + 建立错误档案</div>
+        <div class="lesson-title">Lesson 4 — 总复习：建立错误档案</div>
         <span class="lesson-badge">巩固</span>
         <span class="lesson-chevron">▶</span>
       </div>
       <div class="lesson-body">
         <ul class="checklist">
-          <li>整理本周所有发音错误，用不同颜色标记（红=完全不会，黄=不稳定）</li>
-          <li>重音位置出错 → 去字典听发音，连续听 10-20 遍，纠正后再发音</li>
-          <li>实在发不准的音 → 先用中文谐音辅助（只在初期用），记整词发音即可</li>
-          <li>每个易错音标写 3 个例词，贴在桌前，每天早上念一遍</li>
+          <li>把每次发错的音记下来，标红；下次复习先从红色开始</li>
+          <li>重读位置出错 → 打开有道词典，连续听 10-20 遍再跟读</li>
+          <li>实在发不准 → 先用中文谐音辅助（只在初期用，逐步脱离）</li>
+          <li>每个易错音写 3 个例词，每天早上开口念一遍</li>
         </ul>
         <div class="tip-box">
-          <b>完成发音阶段的标志</b>
-          <p>听到一个陌生单词，能判断出重读音节在哪里；拿到音标能准确发出元音部分。达到这个标准，就可以进入 PTE 题型训练。</p>
+          <b>进入下一阶段的标准</b>
+          <p>能看着自然拼读表，从 A 到 Z 流利说出每个字母的本音和一个例词，发音不卡壳。达到这个标准，就可以开始 PTE 题型训练。</p>
         </div>
       </div>
     </div>
@@ -871,6 +934,15 @@ In summary, the lecture gives information about <span class="placeholder">【主
 </div><!-- /container -->
 
 <script>
+function playWord(word) {
+  if (!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(word);
+  u.lang = 'en-US';
+  u.rate = 0.75;
+  window.speechSynthesis.speak(u);
+}
+
 function showPath(id) {
   document.querySelectorAll('.path-section').forEach(s => s.classList.remove('active'));
   document.querySelectorAll('.path-tab').forEach(b => b.classList.remove('active'));

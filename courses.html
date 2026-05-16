@@ -935,7 +935,13 @@ In summary, the lecture gives information about <span class="placeholder">【主
 </div><!-- /container -->
 
 <script>
-// Preload voices (Chrome loads them async)
+// 本音：用大骐本人录音
+function playPhoneme(letter) {
+  const audio = new Audio('audio/phonemes/phoneme_' + letter.toLowerCase() + '.wav');
+  audio.play();
+}
+
+// 例词：用 TTS（男声美音）
 let _cachedVoices = [];
 if (window.speechSynthesis) {
   window.speechSynthesis.onvoiceschanged = function() {
@@ -944,21 +950,12 @@ if (window.speechSynthesis) {
   _cachedVoices = window.speechSynthesis.getVoices();
 }
 
-// Phoneme approximations for Web Speech TTS
-const _phonemeMap = {
-  A:'aah', B:'buh', C:'kuh', D:'duh', E:'eh', F:'fffff', G:'guh', H:'huh',
-  I:'ih',  J:'juh', K:'kuh', L:'llll', M:'mmmm', N:'nnnn', O:'awh', P:'puh',
-  Q:'kwuh', R:'ruh', S:'ssss', T:'tuh', U:'uh', V:'vvvv', W:'wuh',
-  X:'ks', Y:'yuh', Z:'zzzz'
-};
-
-function _speak(text, rate, pitch) {
+function playWord(text) {
   if (!window.speechSynthesis) return;
   window.speechSynthesis.cancel();
   const u = new SpeechSynthesisUtterance(text);
   u.lang = 'en-US';
-  u.rate = rate || 0.78;
-  u.pitch = 0.85;
+  u.rate = 0.78;
   const voices = _cachedVoices.length ? _cachedVoices : window.speechSynthesis.getVoices();
   const preferred = ['Reed (英语（美国）)','Grandpa (英语（美国）)','Rocko (英语（美国）)','Reed','Grandpa','Fred','Google US English'];
   let picked = null;
@@ -969,14 +966,6 @@ function _speak(text, rate, pitch) {
   if (!picked) picked = voices.find(v => v.lang === 'en-US');
   if (picked) { u.voice = picked; u.pitch = picked.name.includes('Reed') ? 0.85 : 0.65; }
   window.speechSynthesis.speak(u);
-}
-
-function playPhoneme(letter) {
-  _speak(_phonemeMap[letter] || letter, 0.55);
-}
-
-function playWord(text) {
-  _speak(text, 0.78);
 }
 
 
